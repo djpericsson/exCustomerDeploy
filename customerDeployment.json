@@ -12,7 +12,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "13"
+            "defaultValue": "14"
         },
         "location": {
             "type": "string",
@@ -29,85 +29,8 @@
             "storage": {
                 "type": "Standard_LRS",
                 "containers": ["attachments", "documents", "exflowdiagnostics"]
-            },
-            "corsRules": {
-                "allowedHeaders": [
-                    "x-ms-meta-abc",
-                    "Content-Encoding",
-                    "Content-Range",
-                    "Accept-Ranges",
-                    "x-ms-meta-data*",
-                    "x-ms-meta-target*"
-                ],
-                "allowedOrigins": [
-                    "[concat('http://', variables('uniqueCustomerString'), '.exflow.debug')]",
-                    "[concat('http://', variables('uniqueCustomerString'), '.tenantName')]"
-                ],
-                "maxAgeInSeconds": 0,
-                "exposedHeaders": [
-                    "Accept-Ranges",
-                    "Content-Range",
-                    "Content-Encoding",
-                    "Content-Length",
-                    "Content-Type"
-                ],
-                "allowedMethods": ["Get"]
             }
         }
-        // "dnsRecordSet": {
-        //     "name": "[variables('uniqueCustomerString')]",
-        //     "recordType": "CNAME",
-        //     "ttl": 3600,
-        //     "dnsRecords": "[concat(variables('uniqueCustomerString'), '.azurewebsites.net')]",
-        //     "resourceGroupName": "[variables('saasResourceGroupName')]"
-        // },
-        // "webApp": {
-        //     "name": "[variables('uniqueCustomerString')]",
-        //     "sourceRepoURI": "https://signupsoftware.visualstudio.com/$Project/_apis/build/builds/$buildID/artifacts?api-version=4.1",
-        //     "appServicePlan": "[variables('customerResourceGroupName')]",
-        //     "OutboundIpAddresses": "",
-        //     "AzureRmWebAppSSLBinding": "",
-        //     "appSettings": {
-        //         "applicationInsightsInstrumentationKey": "",
-        //         "APPINSIGHTS_INSTRUMENTATIONKEY": "",
-        //         "APPINSIGHTS_PORTALINFO": "",
-        //         "APPINSIGHTS_PROFILERFEATURE_VERSION": "",
-        //         "startup.DeploymentName": "[variables('uniqueCustomerString')]",
-        //         "Startup.HostRightPart": ".['tenantName']",
-        //         "Startup.AzureKeyVaultURL": "",
-        //         "offline_": "85.24.197.82"
-        //     }
-        // },
-        // "keyVault": {
-        //     "name": "[variables('uniqueCustomerString')]",
-        //     "contentType": "CustomerDeployment",
-        //     "vaultName": "[variables('uniqueCustomerString')]",
-        //     "sku": "Standard",
-        //     "applicationSettings": {
-        //         "FormsTestSitePassword": "",
-        //         "security_Admins": "",
-        //         "clientTypeName": "ExFlow.Logic.NAVServiceReference20170921.EXFWEB_PortClient,ExFlow.Logic",
-        //         "StorageConnection": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
-        //         "KeyValueStorageConnection": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
-        //         "aad_TenantId": "",
-        //         "security_TicketFormsTestSiteUsers": "",
-        //         "company": "",
-        //         "userName": "",
-        //         "address": "",
-        //         "aad_ClientSecret": "",
-        //         "AppControlMergeFile": "",
-        //         "password": "",
-        //         "aad_PostLogoutRedirectUri": "[concat('https://', variables('uniqueCustomerString') ,'.tenantName', '/ExFlowDynamics/close.aspx?signedout=yes'",
-        //         "aad_ClientId": "",
-        //         "aad_AADInstance": "",
-        //         "endpointName": "ExFlowSSL20170921_Port"
-        //     }
-        // },
-        // "hybridConnection": {
-        //     "name": "[variables('uniqueCustomerString')]",
-        //     "nameSpace": "[variables('uniqueCustomerString')]",
-        //     "enabled": false
-        // }
     },
     "resources": [
         {
@@ -132,7 +55,8 @@
             "name": "[concat(variables('uniqueCustomerString'), '/globalConfiguration')]",
             "apiVersion": "2018-02-14",
             "properties": {
-                "value": "[concat(variables('globalConfiguration'))]"
+                "contentType": "text/plain",
+                "value": "[variables('globalConfiguration')]"
             }
         }
     ]
