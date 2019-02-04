@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "21"
+            "defaultValue": "22"
         },
         "location": {
             "type": "string",
@@ -215,6 +215,7 @@
             "type": "Microsoft.Relay/Namespaces",
             "location": "[resourceGroup().location]",
             "kind": "Relay",
+            "properties": {},
             "resources": [
                 {
                     "apiVersion": "2017-04-01",
