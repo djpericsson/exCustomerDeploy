@@ -68,7 +68,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "19"
+            "defaultValue": "20"
         },
         "location": {
             "type": "string",
@@ -84,6 +84,8 @@
         "webSiteName": "[variables('uniqueCustomerString')]",
         "appServicePlanName": "[variables('uniqueCustomerString')]",
         "keyVaultName": "[variables('uniqueCustomerString')]",
+        "hybridConnectionName": "[variables('uniqueCustomerString')]",
+        "relayName": "[variables('uniqueCustomerString')]",
         "appServicePlanSKU": {
             "F1 Free": {
                 "name": "F1",
@@ -134,7 +136,8 @@
                 "capacity": "4"
             }
         },
-        "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]"
+        "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]",
+        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('relayName'), variables('hybridConnectionName'))]"
     },
     "resources": [
         {
@@ -269,6 +272,21 @@
                             "type": "Custom"
                         }
                     }
+                },
+                {
+                  "apiVersion": "2018-02-01",
+                  "name": "[concat(variables('relayName'), '/', variables('hybridConnectionName'))]",
+                  "type": "hybridConnectionNamespaces/relays",
+                  "location" : "[resourceGroup().location]",
+                  "properties": {
+                    "serviceBusNamespace": "[variables('relayName')]",
+                    "relayName": "[variables('hybridConnectionName')]",            
+                    "relayArmUri": "[variables('hybridConnectionResourceId')]",
+                    "hostName": "[split(json(reference(variables('hybridConnectionResourceId'), '2016-07-01').userMetadata)[0].value, ':')[0]]",
+                    "port": "[split(json(reference(variables('hybridConnectionResourceId'), '2016-07-01').userMetadata)[0].value, ':')[1]]",
+                    "sendKeyName": "defaultSender",
+                    "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/defaultSender'), '2017-04-01').primaryKey]"
+                  }
                 }
             ]
         },
