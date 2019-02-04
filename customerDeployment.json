@@ -6,13 +6,13 @@
             "type": "string",
             "defaultValue": "Addlevel DEV"
         },
-        "dummy": {
-            "type": "string",
-            "defaultValue": "9"
-        },
         "partner": {
             "type": "string",
             "defaultValue": "Addlevel AB"
+        },
+        "dummy": {
+            "type": "string",
+            "defaultValue": "9"
         },
         "location": {
             "type": "string",
@@ -21,7 +21,6 @@
     },
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
-        "customerResourceGroupName": "[resourceGroup().name]",
         "saasResourceGroupName": "SAASServices",
         "globalConfiguration": {
             "subscriptionId": "[subscription().subscriptionid]",
