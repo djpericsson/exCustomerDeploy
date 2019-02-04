@@ -12,7 +12,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "11"
+            "defaultValue": "12"
         },
         "location": {
             "type": "string",
@@ -132,7 +132,7 @@
             "name": "[concat(variables('uniqueCustomerString'), '/globalConfiguration')]",
             "apiVersion": "2018-02-14",
             "properties": {
-                "value": "[variables('globalConfiguration')]"
+                "value": "[json(variables('globalConfiguration'))]"
             }
         }
     ]
