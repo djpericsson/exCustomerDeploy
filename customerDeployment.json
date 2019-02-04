@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "38"
+            "defaultValue": "39"
         },
         "location": {
             "type": "string",
@@ -325,7 +325,9 @@
                     "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
                     "type": "hybridConnectionNamespaces/relays",
                     "location": "[resourceGroup().location]",
-                    "dependsOn": ["[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'))]"],
+                    "dependsOn": [
+                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]"
+                    ],
                     "properties": {
                         "serviceBusNamespace": "[variables('namespaceName')]",
                         "relayName": "[variables('hybridConnectionName')]",
