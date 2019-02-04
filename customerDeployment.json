@@ -8,7 +8,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "6"
+            "defaultValue": "7"
         },
         "partner": {
             "type": "string",
@@ -26,7 +26,7 @@
         "globalConfiguration": {
             "subscriptionId": "[subscription().subscriptionid]",
             "Partner": "[parameters('partner')]",
-            "tenantDomain": "['tenantName']",
+            "tenantDomain": "tenantName",
             "storage": {
                 "type": "Standard_LRS",
                 "containers": ["attachments", "documents", "exflowdiagnostics"]
@@ -114,7 +114,7 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "name": "[variables('uniqueCustomerString')]",
-            "apiVersion": "2016-10-01",
+            "apiVersion": "2018-05-01",
             "location": "[parameters('location')]",
             "properties": {
                 "enabledForDeployment": true,
@@ -131,7 +131,7 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "name": "[concat(variables('uniqueCustomerString'), '/globalConfiguration')]",
-            "apiVersion": "2015-06-01",
+            "apiVersion": "2017-09-01",
             "properties": {
                 "value": "[variables('globalConfiguration')]"
             }
