@@ -8,7 +8,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "7"
+            "defaultValue": "8"
         },
         "partner": {
             "type": "string",
@@ -114,7 +114,7 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "name": "[variables('uniqueCustomerString')]",
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2018-02-14",
             "location": "[parameters('location')]",
             "properties": {
                 "enabledForDeployment": true,
@@ -131,7 +131,7 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "name": "[concat(variables('uniqueCustomerString'), '/globalConfiguration')]",
-            "apiVersion": "2017-09-01",
+            "apiVersion": "2018-02-14",
             "properties": {
                 "value": "[variables('globalConfiguration')]"
             }
