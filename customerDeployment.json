@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "32"
+            "defaultValue": "33"
         },
         "location": {
             "type": "string",
@@ -239,16 +239,16 @@
                             }
                         }
                     ]
-                },
-                {
-                    "apiVersion": "2017-04-01",
-                    "name": "[variables('namespaceAuthRuleName')]",
-                    "type": "Microsoft.Relay/namespaces/authorizationRules",
-                    "dependsOn": ["[variables('hybridConnectionAuthorizationRuleName')]"],
-                    "properties": {
-                        "Rights": ["Send"]
-                    }
                 }
+                // {
+                //     "apiVersion": "2017-04-01",
+                //     "name": "[variables('namespaceAuthRuleName')]",
+                //     "type": "Microsoft.Relay/namespaces/authorizationRules",
+                //     "dependsOn": ["[variables('hybridConnectionAuthorizationRuleName')]"],
+                //     "properties": {
+                //         "Rights": ["Send"]
+                //     }
+                // }
             ]
         },
         {
