@@ -68,7 +68,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "18"
+            "defaultValue": "19"
         },
         "location": {
             "type": "string",
