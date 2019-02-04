@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "26"
+            "defaultValue": "27"
         },
         "location": {
             "type": "string",
@@ -231,7 +231,7 @@
                             "apiVersion": "2017-04-01",
                             "name": "[variables('hybridConnectionAuthorizationRuleName')]",
                             "type": "authorizationRules",
-                            "dependsOn": ["HybridConnections"],
+                            "dependsOn": ["[variables('namespaceName')]"],
                             "properties": {
                                 "Rights": ["Listen"]
                             }
