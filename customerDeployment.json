@@ -6,6 +6,10 @@
             "type": "string",
             "defaultValue": "Addlevel DEV"
         },
+        "dummy": {
+            "type": "string",
+            "defaultValue": "1"
+        },
         "partner": {
             "type": "string",
             "defaultValue": "Addlevel AB"
@@ -46,7 +50,7 @@
                 ],
                 "allowedOrigins": [
                     "[concat('http://', variables('uniqueCustomerString'), '.exflow.debug')]",
-                    "[concat('https://', variables('uniqueCustomerString'), '.', tenant().id]"
+                    "[concat('https://', variables('uniqueCustomerString'), '.tenantName']"
                 ],
                 "maxAgeInSeconds": 0,
                 "exposedHeaders": [
@@ -77,7 +81,7 @@
                     "APPINSIGHTS_PORTALINFO": "",
                     "APPINSIGHTS_PROFILERFEATURE_VERSION": "",
                     "startup.DeploymentName": "[variables('uniqueCustomerString')]",
-                    "Startup.HostRightPart": ".[tenant().id]",
+                    "Startup.HostRightPart": ".['tenantName']",
                     "Startup.AzureKeyVaultURL": "",
                     "offline_": "85.24.197.82"
                 }
@@ -101,7 +105,7 @@
                     "aad_ClientSecret": "",
                     "AppControlMergeFile": "",
                     "password": "",
-                    "aad_PostLogoutRedirectUri": "[concat('https://', variables('uniqueCustomerString') ,'.', tenant().id, '/ExFlowDynamics/close.aspx?signedout=yes'",
+                    "aad_PostLogoutRedirectUri": "[concat('https://', variables('uniqueCustomerString') ,'.tenantName', '/ExFlowDynamics/close.aspx?signedout=yes'",
                     "aad_ClientId": "",
                     "aad_AADInstance": "",
                     "endpointName": "ExFlowSSL20170921_Port"
