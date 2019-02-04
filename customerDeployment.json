@@ -66,9 +66,9 @@
                 "description": "The Exflow URI to be used."
             }
         },
-        "dummy": {
+        "deployCount": {
             "type": "string",
-            "defaultValue": "20"
+            "defaultValue": "21"
         },
         "location": {
             "type": "string",
@@ -85,7 +85,10 @@
         "appServicePlanName": "[variables('uniqueCustomerString')]",
         "keyVaultName": "[variables('uniqueCustomerString')]",
         "hybridConnectionName": "[variables('uniqueCustomerString')]",
-        "relayName": "[variables('uniqueCustomerString')]",
+        "namespaceName": "[variables('uniqueCustomerString')]",
+        "hybridConnectionAuthorizationRuleName": "[variables('uniqueCustomerString')]",
+        "namespaceAuthorizationRuleName": "[variables('uniqueCustomerString')]",
+        "namespaceAuthRuleName": "[concat(variables('namespaceName'), concat('/', variables('namespaceAuthorizationRuleName')))]",
         "appServicePlanSKU": {
             "F1 Free": {
                 "name": "F1",
@@ -207,6 +210,55 @@
             }
         },
         {
+            "apiVersion": "2017-04-01",
+            "name": "[variables('namespaceName')]",
+            "type": "Microsoft.Relay/Namespaces",
+            "location": "[resourceGroup().location]",
+            "kind": "Relay",
+            "resources": [
+              {
+                "apiVersion": "2017-04-01",
+                "name": "[variables('hybridConnectionName')]",
+                "type": "HybridConnections",
+                "dependsOn": [
+                  "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"
+                ],
+                "properties": {
+                  "requiresClientAuthorization": "true",
+                  "userMetadata": "Meta Data supplied by user hybridConnections"
+                },
+                "resources": [
+                  {
+                    "apiVersion": "2017-04-01",
+                    "name": "[variables('hybridConnectionAuthorizationRuleName')]",
+                    "type": "authorizationRules",
+                    "dependsOn": [
+                      "[variables('hybridConnectionName')]"
+                    ],
+                    "properties": {
+                      "Rights": [
+                        "Listen"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "apiVersion": "2017-04-01",
+                "name": "[variables('namespaceAuthRuleName')]",
+                "type": "Microsoft.Relay/namespaces/authorizationRules",
+                "dependsOn": [
+                  "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"
+                ],
+                "properties": {
+                  "Rights": [
+                    "Send"
+                  ]
+                }
+              }
+            ]
+          }
+        {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Web/sites",
@@ -275,11 +327,12 @@
                 },
                 {
                   "apiVersion": "2018-02-01",
-                  "name": "[concat(variables('relayName'), '/', variables('hybridConnectionName'))]",
+                  "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
                   "type": "hybridConnectionNamespaces/relays",
                   "location" : "[resourceGroup().location]",
+                  "dependsOn": ["[variables('hybridConnectionName')]"],
                   "properties": {
-                    "serviceBusNamespace": "[variables('relayName')]",
+                    "serviceBusNamespace": "[variables('namespaceName')]",
                     "relayName": "[variables('hybridConnectionName')]",            
                     "relayArmUri": "[variables('hybridConnectionResourceId')]",
                     "hostName": "[split(json(reference(variables('hybridConnectionResourceId'), '2016-07-01').userMetadata)[0].value, ':')[0]]",
