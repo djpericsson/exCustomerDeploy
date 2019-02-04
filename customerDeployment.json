@@ -8,7 +8,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "4"
+            "defaultValue": "5"
         },
         "partner": {
             "type": "string",
