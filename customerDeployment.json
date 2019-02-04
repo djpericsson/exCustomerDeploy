@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "29"
+            "defaultValue": "30"
         },
         "location": {
             "type": "string",
@@ -227,26 +227,26 @@
                         "userMetadata": "Meta Data supplied by user hybridConnections"
                     },
                     "resources": [
-                        {
-                            "apiVersion": "2017-04-01",
-                            "name": "[variables('hybridConnectionAuthorizationRuleName')]",
-                            "type": "authorizationRules",
-                            "dependsOn": ["[variables('hybridConnectionName')]"],
-                            "properties": {
-                                "Rights": ["Listen"]
-                            }
-                        }
+                        // {
+                        //     "apiVersion": "2017-04-01",
+                        //     "name": "[variables('hybridConnectionAuthorizationRuleName')]",
+                        //     "type": "authorizationRules",
+                        //     "dependsOn": [],
+                        //     "properties": {
+                        //         "Rights": ["Listen"]
+                        //     }
+                        // }
                     ]
-                },
-                {
-                    "apiVersion": "2017-04-01",
-                    "name": "[variables('namespaceAuthRuleName')]",
-                    "type": "Microsoft.Relay/namespaces/authorizationRules",
-                    "dependsOn": ["[variables('hybridConnectionAuthorizationRuleName')]"],
-                    "properties": {
-                        "Rights": ["Send"]
-                    }
                 }
+                // {
+                //     "apiVersion": "2017-04-01",
+                //     "name": "[variables('namespaceAuthRuleName')]",
+                //     "type": "Microsoft.Relay/namespaces/authorizationRules",
+                //     "dependsOn": ["[variables('hybridConnectionAuthorizationRuleName')]"],
+                //     "properties": {
+                //         "Rights": ["Send"]
+                //     }
+                // }
             ]
         },
         {
