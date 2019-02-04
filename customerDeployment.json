@@ -78,12 +78,13 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SAASServices",
-        "globalConfiguration": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
+        "appSettings": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
         "storageAccountName": "[variables('uniqueCustomerString')]",
         "containers": ["attachments", "documents", "exflowdiagnostics"],
         "webSiteName": "[variables('uniqueCustomerString')]",
         "appServicePlanName": "[variables('uniqueCustomerString')]",
-        "AppServicePlanSKU": {
+        "keyVaultName": "[variables('uniqueCustomerString')]",
+        "appServicePlanSKU": {
             "F1 Free": {
                 "name": "F1",
                 "capacity": "1"
@@ -136,32 +137,6 @@
         "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]"
     },
     "resources": [
-        {
-            "type": "Microsoft.KeyVault/vaults",
-            "name": "[variables('uniqueCustomerString')]",
-            "apiVersion": "2018-02-14",
-            "location": "[parameters('location')]",
-            "properties": {
-                "enabledForDeployment": true,
-                "enabledForDiskEncryption": false,
-                "enabledForTemplateDeployment": true,
-                "tenantId": "[subscription().tenantId]",
-                "accessPolicies": [],
-                "sku": {
-                    "name": "Standard",
-                    "family": "A"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "name": "[concat(variables('uniqueCustomerString'), '/appSettings')]",
-            "apiVersion": "2018-02-14",
-            "properties": {
-                "contentType": "text/plain",
-                "value": "[variables('globalConfiguration')]"
-            }
-        },
         {
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
@@ -296,6 +271,56 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "name": "[variables('keyVaultName')]",
+            "apiVersion": "2018-02-14",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[subscription().tenantid]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[subscription().tenantid]",
+                        "objectId": "[reference(concat(resourceId('Microsoft.Web/sites', variables('webSiteName')), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                        "permissions": {
+                            "keys": [],
+                            "secrets": ["get"],
+                            "certificates": []
+                        }
+                    }
+                ],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false
+            },
+            "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"]
+        },
+        {
+            "name": "[guid(variables('webSiteName'))]",
+            "apiVersion": "2017-09-01",
+            "location": "[resourceGroup().location]",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference(variables('identityResourceId'), '2015-08-31-PREVIEW').principalId]",
+                "scope": "[resourceGroup().id]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('uniqueCustomerString'), '/appSettings')]",
+            "apiVersion": "2018-02-14",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[variables('appSettings')]"
+            }
         }
     ]
 }
