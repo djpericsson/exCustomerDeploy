@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "22"
+            "defaultValue": "23"
         },
         "location": {
             "type": "string",
@@ -140,7 +140,7 @@
             }
         },
         "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]",
-        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('relayName'), variables('hybridConnectionName'))]"
+        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]"
     },
     "resources": [
         {
