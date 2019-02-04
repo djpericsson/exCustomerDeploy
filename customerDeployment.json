@@ -12,7 +12,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "15"
+            "defaultValue": "16"
         },
         "location": {
             "type": "string",
@@ -22,7 +22,7 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SAASServices",
-        "globalConfiguration": "{\"subscriptionId\":\"subscription()subscriptionid\", \"partner\":Addlevel AB}"
+        "globalConfiguration": "[concat('{\"subscriptionId\":\"', subscription().subscriptionId ,'\", \"partner\":Addlevel AB}')]"
     },
     "resources": [
         {
