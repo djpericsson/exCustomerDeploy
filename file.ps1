@@ -9,4 +9,7 @@ $globalConfiguration = @{
     }
 }
 
-$globalConfigurationJson = ConvertTo-Json $globalConfiguration -Depth 5
+$globalConfigurationJson = ConvertTo-Json $globalConfiguration -Compress
+
+
+{"subscriptionId":"123-456-789","storage":{"containers":["attachments","documents","exflowdiagnostics"],"type":"Standard_LRS"},"resourceCharacterLimit":19,"tenantDomain":"mynenant","Partner":"Addleve AB"}
