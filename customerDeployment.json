@@ -12,7 +12,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "14"
+            "defaultValue": "15"
         },
         "location": {
             "type": "string",
@@ -22,15 +22,7 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SAASServices",
-        "globalConfiguration": {
-            "subscriptionId": "[subscription().subscriptionid]",
-            "Partner": "[parameters('partner')]",
-            "tenantDomain": "tenantName",
-            "storage": {
-                "type": "Standard_LRS",
-                "containers": ["attachments", "documents", "exflowdiagnostics"]
-            }
-        }
+        "globalConfiguration": "{\"subscriptionId\":\"subscription()subscriptionid\", \"partner\":Addlevel AB}"
     },
     "resources": [
         {
@@ -55,7 +47,7 @@
             "name": "[concat(variables('uniqueCustomerString'), '/globalConfiguration')]",
             "apiVersion": "2018-02-14",
             "properties": {
-                "contentType": "text/plain",
+                "contentType": "json",
                 "value": "[variables('globalConfiguration')]"
             }
         }
