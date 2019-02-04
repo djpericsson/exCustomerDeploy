@@ -1,0 +1,84 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "customerName": {
+            "type": "string",
+            "defaultValue": "Addlevel DEV"
+        },
+        "resourceGroup": {
+            "type": "string",
+            "allowedValues": [
+                "xfw-bc-we-prod-rg01",
+                "xfw-bc-we-prod-rg02"
+            ],
+            "defaultValue": "xfw-bc-we-prod-rg01",
+            "metadata": {
+                "description": "The Resource Group to deploy the customer to."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "westeurope"
+        }
+    },
+    "variables": {
+        "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
+        "customerResourceGroupName": "[parameters('resourceGroup')]",
+        "saasResourceGroupName": "SAASServices"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('customerResourceGroupName')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "[concat(variables('identityResourceGroupName'),'-Deployment')]",
+            "resourceGroup": "[variables('customerResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('customerResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults",
+                            "name": "[variables('uniqueCustomerString')]",
+                            "apiVersion": "2016-10-01",
+                            "location": "[parameters('location')]",
+                            "properties": {
+                                "enabledForDeployment": true,
+                                "enabledForDiskEncryption": false,
+                                "enabledForTemplateDeployment": true,
+                                "tenantId": "[subscription().tenantId]",
+                                "accessPolicies": [],
+                                "sku": {
+                                    "name": "Standard",
+                                    "family": "A"
+                                }
+                            }
+                        }
+                        // {
+                        //     "type": "Microsoft.KeyVault/vaults/secrets",
+                        //     "name": "[concat(variables('uniqueCustomerString'), '/adminPassword')]",
+                        //     "apiVersion": "2015-06-01",
+                        //     "properties": {
+                        //         "value": "[parameters('adminPassword')]"
+                        //     }
+                        // }
+                    ]
+                }
+            }
+        }
+    ]
+}
