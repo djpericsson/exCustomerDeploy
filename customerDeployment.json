@@ -12,10 +12,7 @@
         },
         "resourceGroup": {
             "type": "string",
-            "allowedValues": [
-                "xfw-bc-we-prod-rg01",
-                "xfw-bc-we-prod-rg02"
-            ],
+            "allowedValues": ["xfw-bc-we-prod-rg01", "xfw-bc-we-prod-rg02"],
             "defaultValue": "xfw-bc-we-prod-rg01",
             "metadata": {
                 "description": "The Resource Group to deploy the customer to."
@@ -47,9 +44,18 @@
                     "x-ms-meta-data*",
                     "x-ms-meta-target*"
                 ],
-                "allowedOrigins": ["[concat('http://', variables('uniqueCustomerString'), '.exflow.debug')]", "[concat('https://', variables('uniqueCustomerString'), '.', tenant().name]"],
+                "allowedOrigins": [
+                    "[concat('http://', variables('uniqueCustomerString'), '.exflow.debug')]",
+                    "[concat('https://', variables('uniqueCustomerString'), '.', tenant().id]"
+                ],
                 "maxAgeInSeconds": 0,
-                "exposedHeaders": ["Accept-Ranges", "Content-Range", "Content-Encoding", "Content-Length", "Content-Type"],
+                "exposedHeaders": [
+                    "Accept-Ranges",
+                    "Content-Range",
+                    "Content-Encoding",
+                    "Content-Length",
+                    "Content-Type"
+                ],
                 "allowedMethods": ["Get"]
             },
             "dnsRecordSet": {
@@ -63,16 +69,16 @@
                 "name": "[variables('uniqueCustomerString')]",
                 "sourceRepoURI": "https://signupsoftware.visualstudio.com/$Project/_apis/build/builds/$buildID/artifacts?api-version=4.1",
                 "appServicePlan": "[variables('customerResourceGroupName')]",
-                "OutboundIpAddresses": "[OutboundIpAddresses]",
-                "AzureRmWebAppSSLBinding": "[AzureRmWebAppSSLBinding]",
+                "OutboundIpAddresses": "",
+                "AzureRmWebAppSSLBinding": "",
                 "appSettings": {
-                    "applicationInsightsInstrumentationKey": "[AppInsightsKey]",
-                    "APPINSIGHTS_INSTRUMENTATIONKEY": "[AppInsightsKey]",
-                    "APPINSIGHTS_PORTALINFO": "[APPPORTALINFO]",
-                    "APPINSIGHTS_PROFILERFEATURE_VERSION": "[APPPROFILERVERSION]",
+                    "applicationInsightsInstrumentationKey": "",
+                    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+                    "APPINSIGHTS_PORTALINFO": "",
+                    "APPINSIGHTS_PROFILERFEATURE_VERSION": "",
                     "startup.DeploymentName": "[variables('uniqueCustomerString')]",
-                    "Startup.HostRightPart": ".[tenant().name]",
-                    "Startup.AzureKeyVaultURL": "[CustomerKeyVault]",
+                    "Startup.HostRightPart": ".[tenant().id]",
+                    "Startup.AzureKeyVaultURL": "",
                     "offline_": "85.24.197.82"
                 }
             },
@@ -82,20 +88,20 @@
                 "vaultName": "[variables('uniqueCustomerString')]",
                 "sku": "Standard",
                 "applicationSettings": {
-                    "FormsTestSitePassword": "[FormsTestSitePassword]",
-                    "security_Admins": "[SecurityAdmins]",
+                    "FormsTestSitePassword": "",
+                    "security_Admins": "",
                     "clientTypeName": "ExFlow.Logic.NAVServiceReference20170921.EXFWEB_PortClient,ExFlow.Logic",
-                    "StorageConnection": "DefaultEndpointsProtocol=https;AccountName=[DeploymentName];AccountKey=[StorageKey];EndpointSuffix=core.windows.net",
-                    "KeyValueStorageConnection": "DefaultEndpointsProtocol=https;AccountName=[DeploymentName];AccountKey=[StorageKey];EndpointSuffix=core.windows.net",
+                    "StorageConnection": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
+                    "KeyValueStorageConnection": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
                     "aad_TenantId": "",
-                    "security_TicketFormsTestSiteUsers": "[TicketFormsTestSiteUsers]",
-                    "company": "[Company]",
-                    "userName": "[ServiceUsername]",
-                    "address": "[ServiceEndpoint]",
+                    "security_TicketFormsTestSiteUsers": "",
+                    "company": "",
+                    "userName": "",
+                    "address": "",
                     "aad_ClientSecret": "",
-                    "AppControlMergeFile": "[AppControlMergeFile]",
-                    "password": "[ServicePassword]",
-                    "aad_PostLogoutRedirectUri": "https://[CustomerShortname].[TenantName]/ExFlowDynamics/close.aspx?signedout=yes",
+                    "AppControlMergeFile": "",
+                    "password": "",
+                    "aad_PostLogoutRedirectUri": "[concat('https://', variables('uniqueCustomerString') ,'.', tenant().id, '/ExFlowDynamics/close.aspx?signedout=yes'",
                     "aad_ClientId": "",
                     "aad_AADInstance": "",
                     "endpointName": "ExFlowSSL20170921_Port"
