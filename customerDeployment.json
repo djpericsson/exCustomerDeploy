@@ -14,14 +14,6 @@
             "type": "string",
             "defaultValue": "Addlevel AB"
         },
-        "resourceGroup": {
-            "type": "string",
-            "allowedValues": ["xfw-bc-we-prod-rg01", "xfw-bc-we-prod-rg02"],
-            "defaultValue": "xfw-bc-we-prod-rg01",
-            "metadata": {
-                "description": "The Resource Group to deploy the customer to."
-            }
-        },
         "location": {
             "type": "string",
             "defaultValue": "westeurope"
@@ -29,7 +21,7 @@
     },
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
-        "customerResourceGroupName": "[parameters('resourceGroup')]",
+        "customerResourceGroupName": "[resourceGroup().name]",
         "saasResourceGroupName": "SAASServices",
         "globalConfiguration": {
             "subscriptionId": "[subscription().subscriptionid]",
