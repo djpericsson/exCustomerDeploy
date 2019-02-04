@@ -12,7 +12,7 @@
         },
         "dummy": {
             "type": "string",
-            "defaultValue": "15"
+            "defaultValue": "16"
         },
         "location": {
             "type": "string",
@@ -32,9 +32,8 @@
             }
         },
         "globalConfiguration2": "[concat('{\"subscriptionId\":\"', subscription().subscriptionId,'\", \"partner\":\"Addlevel AB\"}')]",
-        "globalConfiguration3": "[concat('{\"subscriptionId\":\"', subscription().subscriptionId,'\",\"storage\":{\"containers\":[\"attachments\",\"documents\",\"exflowdiagnostics\"],\"type\":\"Standard_LRS\"},}')]"
-
-        
+        "globalConfiguration3": "[concat('{\"subscriptionId\":\"', subscription().subscriptionId,'\",\"storage\":{\"containers\":[\"attachments\",\"documents\",\"exflowdiagnostics\"],\"type\":\"Standard_LRS\"},}')]",
+        "globalConfiguration4": "[concat('{{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', subscription().displayName,'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}}')]"
     },
     "resources": [
         {
@@ -56,11 +55,11 @@
         },
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
-            "name": "[concat(variables('uniqueCustomerString'), '/globalConfiguration')]",
+            "name": "[concat(variables('uniqueCustomerString'), '/appSettings')]",
             "apiVersion": "2018-02-14",
             "properties": {
                 "contentType": "text/plain",
-                "value": "[variables('globalConfiguration3')]"
+                "value": "[variables('globalConfiguration4')]"
             }
         }
     ]
