@@ -6,13 +6,25 @@
             "type": "string",
             "defaultValue": "Addlevel DEV"
         },
+        "tenantName": {
+            "type": "string",
+            "defaultValue": "dev.addlevel.net"
+        },
         "partner": {
             "type": "string",
             "defaultValue": "Addlevel AB"
         },
+        "ExflowUri": {
+            "type": "string",
+            "defaultValue": "https://axtestdynamics365aos-addlevel.cloudax.dynamics.com",
+            "minLength": 1,
+            "metadata": {
+                "description": "The Exflow URI to be used."
+            }
+        },
         "dummy": {
             "type": "string",
-            "defaultValue": "17"
+            "defaultValue": "18"
         },
         "location": {
             "type": "string",
@@ -22,18 +34,9 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SAASServices",
-        "globalConfiguration": {
-            "subscriptionId": "[subscription().subscriptionid]",
-            "Partner": "[parameters('partner')]",
-            "tenantDomain": "tenantName",
-            "storage": {
-                "type": "Standard_LRS",
-                "containers": ["attachments", "documents", "exflowdiagnostics"]
-            }
-        },
-        "globalConfiguration2": "[concat('{\"subscriptionId\":\"', subscription().subscriptionId,'\", \"partner\":\"Addlevel AB\"}')]",
-        "globalConfiguration3": "[concat('{\"subscriptionId\":\"', subscription().subscriptionId,'\",\"storage\":{\"containers\":[\"attachments\",\"documents\",\"exflowdiagnostics\"],\"type\":\"Standard_LRS\"},}')]",
-        "globalConfiguration4": "[concat('{{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', subscription().displayName,'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}}')]"
+        "globalConfiguration": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
+        "storageAccountName": "[variables('uniqueCustomerString')]",
+        "containerName": "deployment-scripts"
     },
     "resources": [
         {
@@ -59,7 +62,48 @@
             "apiVersion": "2018-02-14",
             "properties": {
                 "contentType": "text/plain",
-                "value": "[variables('globalConfiguration4')]"
+                "value": "[variables('globalConfiguration')]"
+            }
+        },
+        {
+            "name": "[variables('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2018-02-01",
+            "location": "[parameters('location')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "accessTier": "Hot"
+            },
+            "resources": [
+                {
+                    "name": "[concat('default/', variables('containerName'))]",
+                    "type": "blobServices/containers",
+                    "apiVersion": "2018-07-01",
+                    "dependsOn": ["[variables('storageAccountName')]"]
+                }
+            ]
+        },
+        {
+            "name": "[concat(variables('storageAccountName'), '/default')]",
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2018-07-01",
+            "dependsOn": ["[variables('storageAccountName')]"],
+            "properties": {
+                "cors": {
+                    "corsRules": [
+                        {
+                            "allowedOrigins": ["[parameters('ExflowUri')]"],
+                            "allowedMethods": ["GET"],
+                            "maxAgeInSeconds": 200,
+                            "exposedHeaders": ["x-ms-meta-*"],
+                            "allowedHeaders": ["x-ms-meta-abc", "x-ms-meta-data*", "x-ms-meta-target*"]
+                        }
+                    ]
+                }
             }
         }
     ]
