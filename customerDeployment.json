@@ -14,6 +14,50 @@
             "type": "string",
             "defaultValue": "Addlevel AB"
         },
+        "StorageSKU": {
+            "type": "string",
+            "allowedValues": ["Standard_LRS", "Standard_ZRS", "Standard_GRS", "Standard_RAGRS", "Premium_LRS"],
+            "defaultValue": "Standard_LRS",
+            "metadata": {
+                "description": "The type of SKU to use for the storage account."
+            }
+        },
+        "SecurityAdmins": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Adinistrators of the Web Site, separated by ','."
+            }
+        },
+        "AppServicePlanSKU": {
+            "type": "string",
+            "allowedValues": [
+                "F1 Free",
+                "D1 Shared",
+                "B1 Basic",
+                "B2 Basic",
+                "B3 Basic",
+                "S1 Standard",
+                "S2 Standard",
+                "S3 Standard",
+                "P1 Premium",
+                "P2 Premium",
+                "P3 Premium",
+                "P4 Premium"
+            ],
+            "defaultValue": "D1 Shared",
+            "metadata": {
+                "description": "The App Service Plan SKU."
+            }
+        },
+        "PackageUri": {
+            "type": "string",
+            "defaultValue": "https://github.com/djpericsson/AzureWebAppDeploy/raw/master/alis.zip",
+            "minLength": 1,
+            "metadata": {
+                "description": "The application package URI to be deployed to the WebApp."
+            }
+        },
         "ExflowUri": {
             "type": "string",
             "defaultValue": "https://axtestdynamics365aos-addlevel.cloudax.dynamics.com",
@@ -36,7 +80,60 @@
         "saasResourceGroupName": "SAASServices",
         "globalConfiguration": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
         "storageAccountName": "[variables('uniqueCustomerString')]",
-        "containerName": "deployment-scripts"
+        "containers": ["attachments", "documents", "exflowdiagnostics"],
+        "webSiteName": "[variables('uniqueCustomerString')]",
+        "appServicePlanName": "[variables('uniqueCustomerString')]",
+        "AppServicePlanSKU": {
+            "F1 Free": {
+                "name": "F1",
+                "capacity": "1"
+            },
+            "D1 Shared": {
+                "name": "D1",
+                "capacity": "2"
+            },
+            "B1 Basic": {
+                "name": "B1",
+                "capacity": "1"
+            },
+            "B2 Basic": {
+                "name": "B2",
+                "capacity": "2"
+            },
+            "B3 Basic": {
+                "name": "B3",
+                "capacity": "3"
+            },
+            "S1 Standard": {
+                "name": "S1",
+                "capacity": "1"
+            },
+            "S2 Standard": {
+                "name": "S2",
+                "capacity": "2"
+            },
+            "S3 Standard": {
+                "name": "S3",
+                "capacity": "3"
+            },
+            "P1 Premium": {
+                "name": "P1",
+                "capacity": "1"
+            },
+            "P2 Premium": {
+                "name": "P2",
+                "capacity": "2"
+            },
+            "P3 Premium": {
+                "name": "P3",
+                "capacity": "3"
+            },
+            "P4 Premium": {
+                "name": "P4",
+                "capacity": "4"
+            }
+        },
+        "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]"
     },
     "resources": [
         {
@@ -72,7 +169,7 @@
             "location": "[parameters('location')]",
             "kind": "StorageV2",
             "sku": {
-                "name": "Standard_LRS",
+                "name": "[parameters('StorageSKU')]",
                 "tier": "Standard"
             },
             "properties": {
@@ -80,7 +177,19 @@
             },
             "resources": [
                 {
-                    "name": "[concat('default/', variables('containerName'))]",
+                    "name": "[concat('default/', variables('containers')[0])]",
+                    "type": "blobServices/containers",
+                    "apiVersion": "2018-07-01",
+                    "dependsOn": ["[variables('storageAccountName')]"]
+                },
+                {
+                    "name": "[concat('default/', variables('containers')[1])]",
+                    "type": "blobServices/containers",
+                    "apiVersion": "2018-07-01",
+                    "dependsOn": ["[variables('storageAccountName')]"]
+                },
+                {
+                    "name": "[concat('default/', variables('containers')[2])]",
                     "type": "blobServices/containers",
                     "apiVersion": "2018-07-01",
                     "dependsOn": ["[variables('storageAccountName')]"]
@@ -105,6 +214,88 @@
                     ]
                 }
             }
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "name": "[variables('appServicePlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[variables('AppServicePlanSKU')[parameters('AppServicePlanSKU')].name]",
+                "capacity": "[variables('AppServicePlanSKU')[parameters('AppServicePlanSKU')].capacity]"
+            },
+            "properties": {
+                "name": "[variables('appServicePlanName')]"
+            }
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "name": "[variables('webSiteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
+            "properties": {
+                "name": "[variables('webSiteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+            },
+            "resources": [
+                {
+                    "name": "MSDeploy",
+                    "type": "extensions",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2018-02-01",
+                    "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"],
+                    "properties": {
+                        "packageUri": "[parameters('PackageUri')]",
+                        "dbType": "None",
+                        "connectionString": "",
+                        "setParameters": {
+                            // "IIS Web Application Name": "[concat(variables('uniqueString'), uniqueString(resourcegroup().id))]"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2018-02-01",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
+                    ],
+                    "properties": {
+                        "aad_ClientId": "[reference(variables('identityResourceId'), '2015-08-31-PREVIEW').principalId]",
+                        "aad_ClientSecret": "aad_ClientSecret",
+                        "aad_TenantId": "[subscription().tenantId]",
+                        "aad_PostLogoutRedirectUri": "[concat('https://',variables('webSiteName'),'.azurewebsites.net/close.aspx?signedout=yes')]",
+                        "aad_ExternalApiId": "[parameters('ExflowUri')]",
+                        "security_Admins": "[parameters('SecurityAdmins')]"
+                    }
+                },
+                {
+                    "apiVersion": "2018-02-01",
+                    "name": "connectionstrings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
+                    ],
+                    "properties": {
+                        "StorageConnection": {
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',concat(listKeys(concat('/Microsoft.Storage/storageAccounts/', variables('storageAccountName')),'2015-05-01-preview').key1))]",
+                            "Name": "StorageConnection",
+                            "type": "Custom"
+                        },
+                        "KeyValueStorageConnection": {
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',concat(listKeys(concat('/Microsoft.Storage/storageAccounts/', variables('storageAccountName')),'2015-05-01-preview').key1))]",
+                            "Name": "StorageConnection",
+                            "type": "Custom"
+                        }
+                    }
+                }
+            ]
         }
     ]
 }
