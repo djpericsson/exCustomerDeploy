@@ -174,7 +174,6 @@
             "apiVersion": "2018-05-01",
             "name": "[concat(variables('saasResourceGroupName'),'-DNS')]",
             "resourceGroup": "[variables('saasResourceGroupName')]",
-            "dependsOn": ["[variables('saasResourceGroupName')]"],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
