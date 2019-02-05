@@ -165,51 +165,32 @@
         },
         "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]",
         "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
-        "defaultSASKeyName": "RootManageSharedAccessKey"
+        "defaultSASKeyName": "RootManageSharedAccessKey",
+        "templateBaseUri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master"
     },
     "resources": [
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "location": "[resourceGroup().location]",
-            "name": "[variables('saasResourceGroupName')]",
-            "properties": {}
-        },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "name": "[concat(variables('saasResourceGroupName'),'-DNS')]",
             "resourceGroup": "[variables('saasResourceGroupName')]",
-            "dependsOn": ["[resourceId('Microsoft.Resources/resourceGroups/', variables('saasResourceGroupName'))]"],
+            "dependsOn": ["[variables('saasResourceGroupName')]"],
             "properties": {
                 "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "parameters": {},
-                    "variables": {},
-                    "resources": [
-                        {
-                            "type": "Microsoft.Network/dnszones",
-                            "name": "signupsoftware.com",
-                            "apiVersion": "2016-04-01",
-                            "location": "global",
-                            "properties": {}
-                        },
-                        {
-                            "type": "Microsoft.Network/dnsZones/CNAME",
-                            "name": "[concat('signupsoftware.com', '/', tolower(parameters('customerName')))]",
-                            "apiVersion": "2016-04-01",
-                            "location": "global",
-                            "dependsOn": ["signupsoftware.com"],
-                            "properties": {
-                                "TTL": 3600,
-                                "CNAMERecord": {
-                                    "cname": "[concat('https://', variables('webSiteName'), '.azurewebsites.net')]"
-                                }
-                            }
-                        }
-                    ]
+                "templateLink": {
+                    "uri": "[concat(variables('templateBaseUri'), '/', 'cnameDeploy.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "customerName": {
+                        "value": "[parameters('customerName')]"
+                    },
+                    "webSiteName": {
+                        "value": "[variables('webSiteName')]"
+                    },
+                    "resourceGroupName": {
+                        "value": "[variables('saasResourceGroupName')]"
+                    }
                 }
             }
         },
