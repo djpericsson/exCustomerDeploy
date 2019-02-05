@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "44"
+            "defaultValue": "45"
         },
         "location": {
             "type": "string",
