@@ -4,15 +4,24 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "Addlevel DEV"
+            "defaultValue": "",
+            "metadata": {
+                "description": "The name of the Customer to deploy."
+            }
         },
         "tenantName": {
             "type": "string",
-            "defaultValue": "dev.addlevel.net"
+            "defaultValue": "",
+            "metadata": {
+                "description": "The name of tenant to deploy to."
+            }
         },
         "partner": {
             "type": "string",
-            "defaultValue": "Addlevel AB"
+            "defaultValue": "",
+            "metadata": {
+                "description": "The name of the Partner for the Customer deployment."
+            }
         },
         "StorageSKU": {
             "type": "string",
@@ -26,7 +35,7 @@
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "Adinistrators of the Web Site, separated by ','."
+                "description": "Administrators of the Web Site, separated by ','."
             }
         },
         "AppServicePlanSKU": {
@@ -83,14 +92,14 @@
         },
         "hybridConnectionPort": {
             "type": "string",
-            "defaultValue": "443",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Hybrid Connection Port Number."
             }
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "67"
+            "defaultValue": "68"
         },
         "location": {
             "type": "string",
@@ -281,18 +290,6 @@
                         }
                     ]
                 }
-                // {
-                //     "apiVersion": "2017-04-01",
-                //     "name": "[variables('namespaceAuthRuleName')]",
-                //     "type": "Microsoft.Relay/namespaces/authorizationRules",
-                //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                //     "dependsOn": [
-                //         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'))]"
-                //     ],
-                //     "properties": {
-                //         "Rights": ["Send"]
-                //     }
-                // }
             ]
         },
         {
