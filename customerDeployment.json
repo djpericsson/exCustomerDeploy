@@ -90,7 +90,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "62"
+            "defaultValue": "63"
         },
         "location": {
             "type": "string",
@@ -271,7 +271,7 @@
                 },
                 {
                     "apiVersion": "2017-04-01",
-                    "name": "defaultSender",
+                    "name": "authorizationRules/defaultSender",
                     "type": "Microsoft.Relay/namespaces/authorizationRules",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
                     "dependsOn": [
