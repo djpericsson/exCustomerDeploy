@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "43"
+            "defaultValue": "44"
         },
         "location": {
             "type": "string",
@@ -140,7 +140,9 @@
             }
         },
         "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]",
-        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]"
+        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
+        "defaultSASKeyName": "RootManageSharedAccessKey",
+        "defaultAuthRuleResourceId": "[resourceId('Microsoft.Relay/namespaces/authorizationRules', variables('namespaceName'), variables('defaultSASKeyName'))]"
     },
     "resources": [
         {
@@ -215,6 +217,9 @@
             "type": "Microsoft.Relay/Namespaces",
             "location": "[resourceGroup().location]",
             "kind": "Relay",
+            "sku": {
+                "name": "Standard"
+              },
             "properties": {},
             "resources": [
                 {
@@ -394,5 +399,16 @@
                 "value": "[variables('appSettings')]"
             }
         }
-    ]
+    ],
+    "outputs": {
+      "NamespaceDefaultConnectionString": {
+        "type": "string",
+        "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('apiVersion')).primaryConnectionString]"
+      },
+      "DefaultSharedAccessPolicyPrimaryKey": {
+        "type": "string",
+        "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('apiVersion')).primaryKey]"
+      }
+    }
+  }
 }
