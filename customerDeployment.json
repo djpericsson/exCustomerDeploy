@@ -178,7 +178,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[concat(variables('templateBaseUri'), '/', 'cnameDeploy.json')]",
-                    "contentVersion": "1.0.0.0"
+                    "contentVersion": "1.0.0.1"
                 },
                 "parameters": {
                     "customerName": {
