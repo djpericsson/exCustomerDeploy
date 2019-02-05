@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "47"
+            "defaultValue": "48"
         },
         "location": {
             "type": "string",
@@ -245,8 +245,8 @@
                         },
                         {
                             "apiVersion": "2017-04-01",
-                            "name": "defaultSender",
-                            "type": "[variables('namespaceAuthRuleName')]",
+                            "name": "[variables('namespaceAuthRuleName')]",
+                            "type": "authorizationRules",
                             "dependsOn": [
                                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
                             ],
