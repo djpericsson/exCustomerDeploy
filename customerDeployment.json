@@ -66,9 +66,34 @@
                 "description": "The Exflow URI to be used."
             }
         },
+        "hybridConnection": {
+            "type": "string",
+            "allowedValues": ["True", "False"],
+            "defaultValue": "False",
+            "metadata": {
+                "description": "Create a Hybrid Connection for the Web Application."
+            },
+            "minLength": 1
+        },
+        "hybridConnectionHostName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The Hybrid Connection Host Name."
+            },
+            "minLength": 1
+        },
+        "hybridConnectionPort": {
+            "type": "string",
+            "defaultValue": "443",
+            "metadata": {
+                "description": "The Hybrid Connection Port Number."
+            },
+            "minLength": 1
+        },
         "deployCount": {
             "type": "string",
-            "defaultValue": "56"
+            "defaultValue": "57"
         },
         "location": {
             "type": "string",
@@ -226,6 +251,7 @@
                     "apiVersion": "2017-04-01",
                     "name": "[variables('hybridConnectionName')]",
                     "type": "HybridConnections",
+                    "condition": "[equals(parameters('hybridConnection'), 'True')]",
                     "dependsOn": ["[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"],
                     "properties": {
                         "requiresClientAuthorization": "true",
@@ -236,6 +262,7 @@
                             "apiVersion": "2017-04-01",
                             "name": "[variables('defaultSASKeyName')]",
                             "type": "authorizationRules",
+                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
                             "dependsOn": [
                                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
                             ],
@@ -341,6 +368,7 @@
                     "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
                     "type": "hybridConnectionNamespaces/relays",
                     "location": "[resourceGroup().location]",
+                    "condition": "[equals(parameters('hybridConnection'), 'True')]",
                     "dependsOn": [
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]"
                     ],
@@ -348,8 +376,8 @@
                         "serviceBusNamespace": "[variables('namespaceName')]",
                         "relayName": "[variables('hybridConnectionName')]",
                         "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                        "hostName": "myhostname",
-                        "port": "443",
+                        "hostName": "[parameters('hybridConnectionHostName')]",
+                        "port": "[parameters('hybridConnectionPort')]",
                         "sendKeyName": "[variables('defaultSASKeyName')]",
                         "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('defaultSASKeyName')), '2017-04-01').primaryKey]"
                     }
