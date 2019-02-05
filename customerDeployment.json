@@ -90,7 +90,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "59"
+            "defaultValue": "60"
         },
         "location": {
             "type": "string",
@@ -238,7 +238,7 @@
             "name": "[variables('namespaceName')]",
             "type": "Microsoft.Relay/Namespaces",
             "location": "[resourceGroup().location]",
-            "dependsOn": ["[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"],
+            "condition": "[equals(parameters('hybridConnection'), 'True')]",
             "kind": "Relay",
             "sku": {
                 "name": "Standard"
