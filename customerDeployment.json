@@ -72,28 +72,25 @@
             "defaultValue": "False",
             "metadata": {
                 "description": "Create a Hybrid Connection for the Web Application."
-            },
-            "minLength": 1
+            }
         },
         "hybridConnectionHostName": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "The Hybrid Connection Host Name."
-            },
-            "minLength": 1
+            }
         },
         "hybridConnectionPort": {
             "type": "string",
             "defaultValue": "443",
             "metadata": {
                 "description": "The Hybrid Connection Port Number."
-            },
-            "minLength": 1
+            }
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "57"
+            "defaultValue": "58"
         },
         "location": {
             "type": "string",
