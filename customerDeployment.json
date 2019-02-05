@@ -99,11 +99,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "68"
-        },
-        "location": {
-            "type": "string",
-            "defaultValue": "westeurope"
+            "defaultValue": "69"
         }
     },
     "variables": {
@@ -120,6 +116,7 @@
         "hybridConnectionAuthorizationRuleName": "[variables('uniqueCustomerString')]",
         "namespaceAuthorizationRuleName": "defaultListener",
         "namespaceAuthRuleName": "defaultSender",
+        "userMetadata": "[concat('[{\"key\":\"endpoint\",\"value\":\"', parameters('hybridConnectionHostName'), ':', parameters('hybridConnectionPort'), '\"}]')]",
         "appServicePlanSKU": {
             "F1 Free": {
                 "name": "F1",
@@ -179,7 +176,7 @@
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-02-01",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "kind": "StorageV2",
             "sku": {
                 "name": "[parameters('StorageSKU')]",
@@ -261,7 +258,7 @@
                     "dependsOn": ["[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"],
                     "properties": {
                         "requiresClientAuthorization": "true",
-                        "userMetadata": "Meta Data supplied by user hybridConnections"
+                        "userMetadata": "[variables('userMetadata')]"
                     },
                     "resources": [
                         {
