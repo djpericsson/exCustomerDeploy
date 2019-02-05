@@ -90,7 +90,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "65"
+            "defaultValue": "66"
         },
         "location": {
             "type": "string",
@@ -275,7 +275,7 @@
                     "type": "Microsoft.Relay/namespaces/authorizationRules",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
                     "dependsOn": [
-                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
+                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'))]"
                     ],
                     "properties": {
                         "Rights": ["Send"]
