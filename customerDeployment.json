@@ -45,7 +45,7 @@
                 "P3 Premium",
                 "P4 Premium"
             ],
-            "defaultValue": "D1 Shared",
+            "defaultValue": "B1 Basic",
             "metadata": {
                 "description": "The App Service Plan SKU."
             }
@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "52"
+            "defaultValue": "53"
         },
         "location": {
             "type": "string",
