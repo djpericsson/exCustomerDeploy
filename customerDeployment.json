@@ -219,7 +219,7 @@
             "kind": "Relay",
             "sku": {
                 "name": "Standard"
-              },
+            },
             "properties": {},
             "resources": [
                 {
@@ -240,9 +240,7 @@
                                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
                             ],
                             "properties": {
-                                "Rights": [
-                                    "Listen"
-                                ]
+                                "Rights": ["Listen"]
                             }
                         }
                     ]
@@ -255,9 +253,7 @@
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'))]"
                     ],
                     "properties": {
-                        "Rights": [
-                            "Send"
-                        ]
+                        "Rights": ["Send"]
                     }
                 }
             ]
@@ -401,14 +397,13 @@
         }
     ],
     "outputs": {
-      "NamespaceDefaultConnectionString": {
-        "type": "string",
-        "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('apiVersion')).primaryConnectionString]"
-      },
-      "DefaultSharedAccessPolicyPrimaryKey": {
-        "type": "string",
-        "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('apiVersion')).primaryKey]"
-      }
+        "NamespaceDefaultConnectionString": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), '2017-04-01').primaryConnectionString]"
+        },
+        "DefaultSharedAccessPolicyPrimaryKey": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), '2017-04-01').primaryKey]"
+        }
     }
-  }
 }
