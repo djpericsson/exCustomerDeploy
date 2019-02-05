@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "54"
+            "defaultValue": "55"
         },
         "location": {
             "type": "string",
@@ -406,15 +406,5 @@
                 "value": "[variables('appSettings')]"
             }
         }
-    ],
-    "outputs": {
-        "NamespaceDefaultConnectionString": {
-            "type": "string",
-            "value": "[listkeys(variables('defaultAuthRuleResourceId'), '2017-04-01').primaryConnectionString]"
-        },
-        "DefaultSharedAccessPolicyPrimaryKey": {
-            "type": "string",
-            "value": "[listkeys(variables('defaultAuthRuleResourceId'), '2017-04-01').primaryKey]"
-        }
-    }
+    ]
 }
