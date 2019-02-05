@@ -90,7 +90,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "58"
+            "defaultValue": "59"
         },
         "location": {
             "type": "string",
@@ -238,6 +238,7 @@
             "name": "[variables('namespaceName')]",
             "type": "Microsoft.Relay/Namespaces",
             "location": "[resourceGroup().location]",
+            "dependsOn": ["[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"],
             "kind": "Relay",
             "sku": {
                 "name": "Standard"
