@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "50"
+            "defaultValue": "51"
         },
         "location": {
             "type": "string",
@@ -350,8 +350,8 @@
                         "relayArmUri": "[variables('hybridConnectionResourceId')]",
                         "hostName": "[split(json(reference(variables('hybridConnectionResourceId'), '2016-07-01').userMetadata)[0].value, ':')[0]]",
                         "port": "[split(json(reference(variables('hybridConnectionResourceId'), '2016-07-01').userMetadata)[0].value, ':')[1]]",
-                        "sendKeyName": "defaultSender",
-                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/defaultSender'), '2017-04-01').primaryKey]"
+                        "sendKeyName": "[variables('defaultSASKeyName')]",
+                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('defaultSASKeyName')), '2017-04-01').primaryKey]"
                     }
                 }
             ]
