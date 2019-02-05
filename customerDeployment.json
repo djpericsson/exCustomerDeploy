@@ -195,22 +195,20 @@
                             "apiVersion": "2016-04-01",
                             "location": "global",
                             "properties": {}
-                          },
-                          {
+                        },
+                        {
                             "type": "Microsoft.Network/dnsZones/CNAME",
                             "name": "[concat('signupsoftware.com', '/', tolower(parameters('customerName')))]",
                             "apiVersion": "2016-04-01",
                             "location": "global",
-                            "dependsOn": [
-                              "signupsoftware.com"
-                            ],
+                            "dependsOn": ["signupsoftware.com"],
                             "properties": {
-                              "TTL": 3600,
-                              "CNAMERecord": {
-                                "cname": "[concat('https://', variables('webSiteName'), '.azurewebsites.net')]"
+                                "TTL": 3600,
+                                "CNAMERecord": {
+                                    "cname": "[concat('https://', variables('webSiteName'), '.azurewebsites.net')]"
+                                }
                             }
-                            }
-                          }
+                        }
                     ]
                 }
             }
