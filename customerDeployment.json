@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "53"
+            "defaultValue": "54"
         },
         "location": {
             "type": "string",
@@ -347,6 +347,7 @@
                     "properties": {
                         "serviceBusNamespace": "[variables('namespaceName')]",
                         "relayName": "[variables('hybridConnectionName')]",
+                        "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                         "hostName": "myhostname",
                         "port": "443",
                         "sendKeyName": "[variables('defaultSASKeyName')]",
