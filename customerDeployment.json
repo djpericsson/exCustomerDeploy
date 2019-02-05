@@ -68,7 +68,7 @@
         },
         "deployCount": {
             "type": "string",
-            "defaultValue": "46"
+            "defaultValue": "47"
         },
         "location": {
             "type": "string",
@@ -246,27 +246,27 @@
                         {
                             "apiVersion": "2017-04-01",
                             "name": "defaultSender",
-                            "type": "Microsoft.Relay/namespaces/authorizationRules",
+                            "type": "[variables('namespaceAuthRuleName')]",
                             "dependsOn": [
                                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
                             ],
                             "properties": {
                                 "Rights": ["Send"]
                             }
-                        }                        
+                        }
                     ]
-                },
-                {
-                    "apiVersion": "2017-04-01",
-                    "name": "[variables('namespaceAuthRuleName')]",
-                    "type": "Microsoft.Relay/namespaces/authorizationRules",
-                    "dependsOn": [
-                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'))]"
-                    ],
-                    "properties": {
-                        "Rights": ["Send"]
-                    }
                 }
+                // {
+                //     "apiVersion": "2017-04-01",
+                //     "name": "[variables('namespaceAuthRuleName')]",
+                //     "type": "Microsoft.Relay/namespaces/authorizationRules",
+                //     "dependsOn": [
+                //         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'))]"
+                //     ],
+                //     "properties": {
+                //         "Rights": ["Send"]
+                //     }
+                // }
             ]
         },
         {
