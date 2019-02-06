@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AdlTest3",
+            "defaultValue": "AdlTest4",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -178,7 +178,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[concat(variables('templateBaseUri'), '/', 'cnameDeploy.json')]",
-                    "contentVersion": "1.0.0.1"
+                    "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "customerName": {
@@ -186,9 +186,6 @@
                     },
                     "webSiteName": {
                         "value": "[variables('webSiteName')]"
-                    },
-                    "resourceGroupName": {
-                        "value": "[variables('saasResourceGroupName')]"
                     }
                 }
             }
