@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest02",
+            "defaultValue": "AddlevelTest03",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -342,32 +342,32 @@
         //         "ownershipId": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).DomainVerificationToken]"
         //     }
         // },
-        {
-            "type": "Microsoft.CertificateRegistration/certificateOrders/certificates",
-            "name": "[concat(parameters('webAppCertificateName'), concat('/', parameters('webAppCertificateName')))]",
-            "apiVersion": "2015-08-01",
-            "location": "global",
-            "dependsOn": [
-                // "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
-            ],
-            "properties": {
-                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
-                "keyVaultSecretName": "[parameters('webAppCertificateName')]"
-            }
-        },
-        {
-            "type": "Microsoft.Web/certificates",
-            "name": "[parameters('webAppCertificateName')]",
-            "apiVersion": "2015-08-01",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.CertificateRegistration/certificateOrders/certificates', parameters('webAppCertificateName'), parameters('webAppCertificateName'))]"
-            ],
-            "properties": {
-                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
-                "keyVaultSecretName": "[parameters('webAppCertificateName')]"
-            }
-        },
+        // {
+        //     "type": "Microsoft.CertificateRegistration/certificateOrders/certificates",
+        //     "name": "[concat(parameters('webAppCertificateName'), concat('/', parameters('webAppCertificateName')))]",
+        //     "apiVersion": "2015-08-01",
+        //     "location": "global",
+        //     "dependsOn": [
+        //         // "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
+        //     ],
+        //     "properties": {
+        //         "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
+        //         "keyVaultSecretName": "[parameters('webAppCertificateName')]"
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Web/certificates",
+        //     "name": "[parameters('webAppCertificateName')]",
+        //     "apiVersion": "2015-08-01",
+        //     "location": "[resourceGroup().location]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.CertificateRegistration/certificateOrders/certificates', parameters('webAppCertificateName'), parameters('webAppCertificateName'))]"
+        //     ],
+        //     "properties": {
+        //         "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
+        //         "keyVaultSecretName": "[parameters('webAppCertificateName')]"
+        //     }
+        // },
         {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
