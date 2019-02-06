@@ -554,7 +554,7 @@
                             "properties": {
                                 "keyVaultId": "/subscriptions/692529f0-a0ae-4fb6-aa9e-a16df69f87cb/resourcegroups/alis/providers/microsoft.keyvault/vaults/alis-northeurope",
                                 "keyVaultSecretName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4",
-                                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('appServicePlanName'))]"
+                                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
                             }
                         },
                         {
@@ -562,9 +562,7 @@
                             "name": "[variables('webSiteName')]",
                             "apiVersion": "2016-03-01",
                             "location": "[resourceGroup().location]",
-                            "dependsOn": [
-                                "[parameters('webAppCertificateName')]"
-                            ],
+                            "dependsOn": [],
                             "properties": {
                                 "name": "[variables('webSiteName')]",
                                 "hostNameSslStates": [
