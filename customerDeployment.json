@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest11",
+            "defaultValue": "AddlevelTest12",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -565,9 +565,9 @@
                                 "name": "[variables('webSiteName')]",
                                 "hostNameSslStates": [
                                     {
-                                        "name": "[concat(tolower(parameters('customerName')), '.addlevel.com')]",
+                                        "name": "'[concat(tolower(parameters('customerName')), ''.addlevel.com')]",
                                         "sslState": "SniEnabled",
-                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))).Thumbprint]",
+                                        "thumbprint": "D7E53903A96DB6074E6EC35DFAADE9F568D307C9",
                                         "toUpdate": true
                                     }
                                 ]
