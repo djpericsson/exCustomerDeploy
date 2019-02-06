@@ -19,15 +19,15 @@
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2018-05-01",
             "location": "[parameters('location')]",
-            "name": "[variables('resourceGroupName')]",
+            "name": "[parameters('resourceGroupName')]",
             "properties": {}
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
-            "name": "[concat(variables('serviceSO99ResourceGroupName'),'-DNS')]",
+            "name": "[concat(parameters('resourceGroupName'),'-DNS')]",
             "resourceGroup": "[variables('resourceGroupName')]",
-            "dependsOn": ["[resourceId('Microsoft.Resources/resourceGroups/', variables('resourceGroupName'))]"],
+            "dependsOn": ["[resourceId('Microsoft.Resources/resourceGroups/', parameters('resourceGroupName'))]"],
             "properties": {
                 "mode": "Incremental",
                 "template": {
