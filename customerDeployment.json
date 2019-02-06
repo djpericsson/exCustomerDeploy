@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "AddlevelTest01",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -437,7 +437,7 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
-                    "name": "connectionstrings",
+                    "name": "webBindings",
                     "type": "config",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
