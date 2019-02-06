@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest01",
+            "defaultValue": "AddlevelTest02",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -379,7 +379,21 @@
             "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
             "properties": {
                 "name": "[variables('webSiteName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+                "hostNameSslStates": [
+                    {
+                      "name": "[tolower(parameters('customerName'))]",
+                      "sslState": 1,
+                      "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
+                      "toUpdate": true
+                    },
+                    {
+                      "name": "[variables('wwwHostname')]",
+                      "sslState": 1,
+                      "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
+                      "toUpdate": true
+                    }
+                  ]
             },
             "resources": [
                 {
@@ -433,33 +447,6 @@
                             "Name": "StorageConnection",
                             "type": "Custom"
                         }
-                    }
-                },
-                {
-                    "apiVersion": "2018-02-01",
-                    "name": "webBindings",
-                    "type": "config",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
-                        "[resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))]"
-                    ],
-                    "properties": {
-                        "name": "[variables('webSiteName')]",
-                        "hostNameSslStates": [
-                          {
-                            "name": "[tolower(parameters('customerName'))]",
-                            "sslState": 1,
-                            "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
-                            "toUpdate": true
-                          },
-                          {
-                            "name": "[variables('wwwHostname')]",
-                            "sslState": 1,
-                            "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
-                            "toUpdate": true
-                          }
-                        ]
                     }
                 },
                 {
