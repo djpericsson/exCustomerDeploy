@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest07",
+            "defaultValue": "AddlevelTest08",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -536,7 +536,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
                 "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
-                "[resourceId('Microsoft.Resources/deployments', concat(variables('certificateResourceGroupName'),'-VaultPermissions'))]"
+                "[concat(variables('certificateResourceGroupName'),'-VaultPermissions')]"
             ],
             "properties": {
                 "mode": "Incremental",
