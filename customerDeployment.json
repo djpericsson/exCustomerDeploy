@@ -11,14 +11,14 @@
         },
         "tenantName": {
             "type": "string",
-            "defaultValue": "exflowdevcloud",
+            "defaultValue": "dev.addlevel.net",
             "metadata": {
                 "description": "The name of tenant to deploy to."
             }
         },
         "partner": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "Addlevel AB",
             "metadata": {
                 "description": "The name of the Partner for the Customer deployment."
             }
@@ -33,7 +33,7 @@
         },
         "securityAdmins": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "ADMPEER",
             "metadata": {
                 "description": "Administrators of the Web Site, separated by ','."
             }
@@ -77,7 +77,7 @@
         },
         "webAppCertificateName": {
             "type": "string",
-            "defaultValue": "ExDevCloudCert",
+            "defaultValue": "addlevel-com",
             "minLength": 1,
             "metadata": {
                 "description": "The Web Application Certificate Name to be used for SSL bindings."
@@ -86,21 +86,21 @@
         "hybridConnection": {
             "type": "string",
             "allowedValues": ["True", "False"],
-            "defaultValue": "False",
+            "defaultValue": "True",
             "metadata": {
                 "description": "Create a Hybrid Connection for the Web Application."
             }
         },
         "hybridConnectionHostName": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "MyHCServer",
             "metadata": {
                 "description": "The Hybrid Connection Host Name."
             }
         },
         "hybridConnectionPort": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "443",
             "metadata": {
                 "description": "The Hybrid Connection Port Number."
             }
