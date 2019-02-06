@@ -109,6 +109,7 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SignUp-SAAS_Services",
+        "certificateResourceGroupName": "ALIS",
         "templateBaseUri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master",
         "dnsDomainName": "signupsoftware.com",
         "wwwHostname": "[concat('www.', tolower(parameters('customerName')))]",
@@ -350,7 +351,7 @@
                 // "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
             ],
             "properties": {
-                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('saasResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
+                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
                 "keyVaultSecretName": "[parameters('webAppCertificateName')]"
             }
         },
@@ -363,7 +364,7 @@
                 "[resourceId('Microsoft.CertificateRegistration/certificateOrders/certificates', parameters('webAppCertificateName'), parameters('webAppCertificateName'))]"
             ],
             "properties": {
-                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('saasResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
+                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
                 "keyVaultSecretName": "[parameters('webAppCertificateName')]"
             }
         },
