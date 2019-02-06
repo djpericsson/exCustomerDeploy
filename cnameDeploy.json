@@ -31,7 +31,7 @@
             "properties": {
                 "TTL": 3600,
                 "CNAMERecord": {
-                    "cname": "[concat('https://', parameters('webSiteName'), '.azurewebsites.net')]"
+                    "cname": "[concat(parameters('webSiteName'), '.azurewebsites.net')]"
                 }
             }
         }
