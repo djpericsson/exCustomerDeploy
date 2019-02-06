@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest06",
+            "defaultValue": "AddlevelTest07",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -184,22 +184,36 @@
             "apiVersion": "2018-05-01",
             "name": "[concat(variables('saasResourceGroupName'),'-DNS')]",
             "resourceGroup": "[variables('saasResourceGroupName')]",
+            "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('templateBaseUri'), '/', 'cnameDeploy.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "customerName": {
-                        "value": "[parameters('customerName')]"
-                    },
-                    "webSiteName": {
-                        "value": "[variables('webSiteName')]"
-                    },
-                    "dnsDomainName": {
-                        "value": "[variables('dnsDomainName')]"
-                    }
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/dnszones",
+                            "name": "[variables('dnsDomainName')]",
+                            "apiVersion": "2016-04-01",
+                            "location": "global",
+                            "properties": {}
+                        },
+                        {
+                            "type": "Microsoft.Network/dnsZones/CNAME",
+                            "name": "[concat(variables('dnsDomainName'), '/', tolower(parameters('customerName')))]",
+                            "apiVersion": "2016-04-01",
+                            "location": "global",
+                            "dependsOn": ["[variables('dnsDomainName')]"],
+                            "properties": {
+                                "TTL": 3600,
+                                "CNAMERecord": {
+                                    "cname": "[concat(variables('webSiteName'), '.azurewebsites.net')]"
+                                }
+                            }
+                        }
+                    ]
                 }
             }
         },
@@ -321,57 +335,6 @@
             ]
         },
         {
-            "type": "Microsoft.CertificateRegistration/certificateOrders",
-            "name": "[parameters('webAppCertificateName')]",
-            "apiVersion": "2015-08-01",
-            "location": "global",
-            "properties": {
-                "DistinguishedName": "CN=*.addlevel.com",
-                "ValidityInYears": 1,
-                "ProductType": "StandardDomainValidatedWildCardSsl"
-            }
-        },
-        // {
-        //     "type": "Microsoft.DomainRegistration/domains/domainOwnershipIdentifiers",
-        //     "name": "[concat(tolower(parameters('customerName')), concat('/', parameters('webAppCertificateName')))]",
-        //     "apiVersion": "2015-04-01",
-        //     "location": "global",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
-        //     ],
-        //     "properties": {
-        //         "ownershipId": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).DomainVerificationToken]"
-        //     }
-        // },
-        {
-            "type": "Microsoft.CertificateRegistration/certificateOrders/certificates",
-            "name": "[concat(parameters('webAppCertificateName'), concat('/', parameters('webAppCertificateName')))]",
-            "apiVersion": "2015-08-01",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
-            ],
-            "properties": {
-                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('certificateKeyVaultName'))]",
-                "keyVaultSecretName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4"
-                // "keyVaultSecretName": "[parameters('webAppCertificateName')]"
-            }
-        },
-        {
-            "type": "Microsoft.Web/certificates",
-            "name": "[parameters('webAppCertificateName')]",
-            "apiVersion": "2015-08-01",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.CertificateRegistration/certificateOrders/certificates', parameters('webAppCertificateName'), parameters('webAppCertificateName'))]"
-            ],
-            "properties": {
-                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('certificateResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('certificateKeyVaultName'))]",
-                "keyVaultSecretName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4"
-                // "keyVaultSecretName": "[parameters('webAppCertificateName')]"
-            }
-        },
-        {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Web/sites",
@@ -382,21 +345,7 @@
             "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
             "properties": {
                 "name": "[variables('webSiteName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
-                "hostNameSslStates": [
-                    {
-                      "name": "[tolower(parameters('customerName'))]",
-                      "sslState": 1,
-                      "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
-                      "toUpdate": true
-                    },
-                    {
-                      "name": "[variables('wwwHostname')]",
-                      "sslState": 1,
-                      "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
-                      "toUpdate": true
-                    }
-                  ]
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
             },
             "resources": [
                 {
@@ -451,6 +400,14 @@
                             "type": "Custom"
                         }
                     }
+                },
+                {
+                    "type": "hostnameBindings",
+                    "name": "[concat(tolower(parameters('customerName')), '.addlevel.com')]",
+                    "apiVersion": "2016-08-01",
+                    "location": "[resourceGroup().location]",
+                    "properties": {},
+                    "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"]
                 },
                 {
                     "apiVersion": "2018-02-01",
@@ -522,6 +479,106 @@
             "properties": {
                 "contentType": "text/plain",
                 "value": "[variables('appSettings')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "[concat(variables('certificateResourceGroupName'),'-VaultPermissions')]",
+            "resourceGroup": "[variables('certificateResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+                "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults",
+                            "name": "[variables('keyVaultName')]",
+                            "apiVersion": "2018-02-14",
+                            "location": "[resourceGroup().location]",
+                            "scale": null,
+                            "properties": {
+                                "sku": {
+                                    "family": "A",
+                                    "name": "standard"
+                                },
+                                "tenantId": "[subscription().tenantid]",
+                                "accessPolicies": [
+                                    {
+                                        "tenantId": "[subscription().tenantid]",
+                                        "objectId": "[reference(concat(resourceId('Microsoft.Web/sites', variables('webSiteName')), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                        "permissions": {
+                                            "keys": [],
+                                            "secrets": ["get"],
+                                            "certificates": []
+                                        }
+                                    }
+                                ]
+                            },
+                            "dependsOn": []
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "[concat(resourcegroup().name,'-SSL')]",
+            "resourceGroup": "[resourcegroup().name]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+                "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
+                "[resourceId('Microsoft.Resources/deployments', concat(variables('certificateResourceGroupName'),'-VaultPermissions'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Web/certificates",
+                            "name": "[parameters('webAppCertificateName')]",
+                            "apiVersion": "2016-03-01",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "keyVaultId": "/subscriptions/692529f0-a0ae-4fb6-aa9e-a16df69f87cb/resourcegroups/alis/providers/microsoft.keyvault/vaults/alis-northeurope",
+                                "keyVaultSecretName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4",
+                                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('appServicePlanName'))]"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites",
+                            "name": "[variables('webSiteName')]",
+                            "apiVersion": "2016-03-01",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))]"
+                            ],
+                            "properties": {
+                                "name": "[variables('webSiteName')]",
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(tolower(parameters('customerName')), '.addlevel.com')]",
+                                        "sslState": "SniEnabled",
+                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))).Thumbprint]",
+                                        "toUpdate": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
             }
         }
     ]
