@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest12",
+            "defaultValue": "AddlevelTest13",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -112,7 +112,7 @@
         "certificateResourceGroupName": "ALIS",
         "certificateKeyVaultName": "ALIS-NorthEurope",
         "templateBaseUri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master",
-        "dnsDomainName": "signupsoftware.com",
+        "dnsDomainName": "addlevel.com",
         "wwwHostname": "[concat('www.', tolower(parameters('customerName')))]",
         "appSettings": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
         "storageAccountName": "[variables('uniqueCustomerString')]",
@@ -499,16 +499,9 @@
                     "resources": [
                         {
                             "type": "Microsoft.KeyVault/vaults",
-                            "name": "[variables('certificateKeyVaultName')]",
                             "apiVersion": "2018-02-14",
-                            "location": "[resourceGroup().location]",
-                            "scale": null,
+                            "name": "[variables('certificateKeyVaultName')]",
                             "properties": {
-                                "sku": {
-                                    "family": "A",
-                                    "name": "standard"
-                                },
-                                "tenantId": "[subscription().tenantid]",
                                 "accessPolicies": [
                                     {
                                         "tenantId": "[subscription().tenantid]",
@@ -520,8 +513,7 @@
                                         }
                                     }
                                 ]
-                            },
-                            "dependsOn": []
+                            }
                         }
                     ]
                 }
