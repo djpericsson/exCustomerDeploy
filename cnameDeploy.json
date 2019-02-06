@@ -10,6 +10,10 @@
         },
         "resourceGroupName": {
             "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         }
     },
     "variables": {
