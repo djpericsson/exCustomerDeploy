@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest08",
+            "defaultValue": "AddlevelTest09",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -563,7 +563,7 @@
                             "apiVersion": "2016-03-01",
                             "location": "[resourceGroup().location]",
                             "dependsOn": [
-                                "[resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))]"
+                                "[concat('Microsoft.Web/certificates', parameters('webAppCertificateName'))]"
                             ],
                             "properties": {
                                 "name": "[variables('webSiteName')]",
