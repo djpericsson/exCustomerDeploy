@@ -487,7 +487,6 @@
             "name": "[concat(variables('certificateResourceGroupName'),'-VaultPermissions')]",
             "resourceGroup": "[variables('certificateResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
                 "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
             ],
             "properties": {
@@ -500,7 +499,7 @@
                     "resources": [
                         {
                             "type": "Microsoft.KeyVault/vaults",
-                            "name": "[variables('keyVaultName')]",
+                            "name": "[variables('certificateKeyVaultName')]",
                             "apiVersion": "2018-02-14",
                             "location": "[resourceGroup().location]",
                             "scale": null,
@@ -534,7 +533,6 @@
             "name": "[concat(resourcegroup().name,'-SSL')]",
             "resourceGroup": "[resourcegroup().name]",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
                 "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
                 "[concat(variables('certificateResourceGroupName'),'-VaultPermissions')]"
             ],
