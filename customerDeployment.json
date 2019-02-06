@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest04",
+            "defaultValue": "AddlevelTest05",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -319,17 +319,17 @@
                 }
             ]
         },
-        // {
-        //     "type": "Microsoft.CertificateRegistration/certificateOrders",
-        //     "name": "[parameters('webAppCertificateName')]",
-        //     "apiVersion": "2015-08-01",
-        //     "location": "global",
-        //     "properties": {
-        //         "DistinguishedName": "[concat('CN=*.', tolower(parameters('customerName')))]",
-        //         "ValidityInYears": 1,
-        //         "ProductType": "StandardDomainValidatedWildCardSsl"
-        //     }
-        // },
+        {
+            "type": "Microsoft.CertificateRegistration/certificateOrders",
+            "name": "[parameters('webAppCertificateName')]",
+            "apiVersion": "2015-08-01",
+            "location": "global",
+            "properties": {
+                "DistinguishedName": "CN=*.addlevel.com",
+                "ValidityInYears": 1,
+                "ProductType": "StandardDomainValidatedWildCardSsl"
+            }
+        },
         // {
         //     "type": "Microsoft.DomainRegistration/domains/domainOwnershipIdentifiers",
         //     "name": "[concat(tolower(parameters('customerName')), concat('/', parameters('webAppCertificateName')))]",
@@ -348,7 +348,7 @@
             "apiVersion": "2015-08-01",
             "location": "global",
             "dependsOn": [
-                // "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
+                "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
             ],
             "properties": {
                 "existingKeyVaultId": "/subscriptions/692529f0-a0ae-4fb6-aa9e-a16df69f87cb/resourcegroups/alis/providers/microsoft.keyvault/vaults/alis-northeurope",
