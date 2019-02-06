@@ -4,14 +4,14 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AdlTest8",
+            "defaultValue": "",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
         },
         "tenantName": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "exflowdevcloud",
             "metadata": {
                 "description": "The name of tenant to deploy to."
             }
@@ -23,7 +23,7 @@
                 "description": "The name of the Partner for the Customer deployment."
             }
         },
-        "StorageSKU": {
+        "storageSKU": {
             "type": "string",
             "allowedValues": ["Standard_LRS", "Standard_ZRS", "Standard_GRS", "Standard_RAGRS", "Premium_LRS"],
             "defaultValue": "Standard_LRS",
@@ -31,14 +31,14 @@
                 "description": "The type of SKU to use for the storage account."
             }
         },
-        "SecurityAdmins": {
+        "securityAdmins": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Administrators of the Web Site, separated by ','."
             }
         },
-        "AppServicePlanSKU": {
+        "appServicePlanSKU": {
             "type": "string",
             "allowedValues": [
                 "F1 Free",
@@ -59,7 +59,7 @@
                 "description": "The App Service Plan SKU."
             }
         },
-        "PackageUri": {
+        "packageUri": {
             "type": "string",
             "defaultValue": "https://github.com/djpericsson/AzureWebAppDeploy/raw/master/alis.zip",
             "minLength": 1,
@@ -67,12 +67,20 @@
                 "description": "The application package URI to be deployed to the WebApp."
             }
         },
-        "ExflowUri": {
+        "exflowUri": {
             "type": "string",
             "defaultValue": "https://axtestdynamics365aos-addlevel.cloudax.dynamics.com",
             "minLength": 1,
             "metadata": {
                 "description": "The Exflow URI to be used."
+            }
+        },
+        "webAppCertificateName": {
+            "type": "string",
+            "defaultValue": "ExDevCloudCert",
+            "minLength": 1,
+            "metadata": {
+                "description": "The Web Application Certificate Name to be used for SSL bindings."
             }
         },
         "hybridConnection": {
@@ -101,6 +109,9 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SignUp-SAAS_Services",
+        "templateBaseUri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master",
+        "dnsDomainName": "signupsoftware.com",
+        "wwwHostname": "[concat('www.', tolower(parameters('customerName')))]",
         "appSettings": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
         "storageAccountName": "[variables('uniqueCustomerString')]",
         "containers": ["attachments", "documents", "exflowdiagnostics"],
@@ -109,7 +120,6 @@
         "keyVaultName": "[variables('uniqueCustomerString')]",
         "hybridConnectionName": "[variables('uniqueCustomerString')]",
         "namespaceName": "[variables('uniqueCustomerString')]",
-        "hybridConnectionAuthorizationRuleName": "[variables('uniqueCustomerString')]",
         "namespaceAuthorizationRuleName": "defaultListener",
         "namespaceAuthRuleName": "defaultSender",
         "userMetadata": "[concat('[{\"key\":\"endpoint\",\"value\":\"', parameters('hybridConnectionHostName'), ':', parameters('hybridConnectionPort'), '\"}]')]",
@@ -164,9 +174,7 @@
             }
         },
         "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]",
-        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
-        "defaultSASKeyName": "RootManageSharedAccessKey",
-        "templateBaseUri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master"
+        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]"
     },
     "resources": [
         {
@@ -186,6 +194,9 @@
                     },
                     "webSiteName": {
                         "value": "[variables('webSiteName')]"
+                    },
+                    "dnsDomainName": {
+                        "value": "[variables('dnsDomainName')]"
                     }
                 }
             }
@@ -307,6 +318,55 @@
                 }
             ]
         },
+        // {
+        //     "type": "Microsoft.CertificateRegistration/certificateOrders",
+        //     "name": "[parameters('webAppCertificateName')]",
+        //     "apiVersion": "2015-08-01",
+        //     "location": "global",
+        //     "properties": {
+        //         "DistinguishedName": "[concat('CN=*.', tolower(parameters('customerName')))]",
+        //         "ValidityInYears": 1,
+        //         "ProductType": "StandardDomainValidatedWildCardSsl"
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.DomainRegistration/domains/domainOwnershipIdentifiers",
+        //     "name": "[concat(tolower(parameters('customerName')), concat('/', parameters('webAppCertificateName')))]",
+        //     "apiVersion": "2015-04-01",
+        //     "location": "global",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
+        //     ],
+        //     "properties": {
+        //         "ownershipId": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).DomainVerificationToken]"
+        //     }
+        // },
+        {
+            "type": "Microsoft.CertificateRegistration/certificateOrders/certificates",
+            "name": "[concat(parameters('webAppCertificateName'), concat('/', parameters('webAppCertificateName')))]",
+            "apiVersion": "2015-08-01",
+            "location": "global",
+            "dependsOn": [
+                // "[resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))]"
+            ],
+            "properties": {
+                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('saasResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
+                "keyVaultSecretName": "[parameters('webAppCertificateName')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/certificates",
+            "name": "[parameters('webAppCertificateName')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CertificateRegistration/certificateOrders/certificates', parameters('webAppCertificateName'), parameters('webAppCertificateName'))]"
+            ],
+            "properties": {
+                "existingKeyVaultId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('saasResourceGroupName'), '/providers/Microsoft.KeyVault/vaults/', variables('keyVaultName'))]",
+                "keyVaultSecretName": "[parameters('webAppCertificateName')]"
+            }
+        },
         {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
@@ -372,6 +432,33 @@
                             "Name": "StorageConnection",
                             "type": "Custom"
                         }
+                    }
+                },
+                {
+                    "apiVersion": "2018-02-01",
+                    "name": "connectionstrings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
+                        "[resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))]"
+                    ],
+                    "properties": {
+                        "name": "[variables('webSiteName')]",
+                        "hostNameSslStates": [
+                          {
+                            "name": "[tolower(parameters('customerName'))]",
+                            "sslState": 1,
+                            "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
+                            "toUpdate": true
+                          },
+                          {
+                            "name": "[variables('wwwHostname')]",
+                            "sslState": 1,
+                            "thumbprint": "[reference(resourceId('Microsoft.CertificateRegistration/certificateOrders', parameters('webAppCertificateName'))).SignedCertificate.Thumbprint]",
+                            "toUpdate": true
+                          }
+                        ]
                     }
                 },
                 {
