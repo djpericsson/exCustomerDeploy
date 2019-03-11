@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest30",
+            "defaultValue": "AddlevelTest32",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -347,10 +347,14 @@
             "identity": {
                 "type": "SystemAssigned"
             },
-            "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+                "[resourceId('microsoft.insights/components/', variables('webSiteName'))]"
+            ],
             "properties": {
                 "name": "[variables('webSiteName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('webSiteName')), '2015-05-01').InstrumentationKey]"
             },
             "resources": [
                 {
@@ -358,8 +362,7 @@
                     "name": "Microsoft.ApplicationInsights.AzureWebSites",
                     "type": "siteextensions",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-                        "[resourceId('microsoft.insights/components/', variables('webSiteName'))]"
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
                     ],
                     "properties": {}
                 },
@@ -385,7 +388,6 @@
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
                         "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
-                        "[resourceId('microsoft.insights/components/', variables('webSiteName'))]",
                         "Microsoft.ApplicationInsights.AzureWebSites"
                     ],
                     "properties": {
@@ -394,8 +396,7 @@
                         "aad_TenantId": "[subscription().tenantId]",
                         "aad_PostLogoutRedirectUri": "[concat('https://', variables('webSiteName'), '.azurewebsites.net/close.aspx?signedout=yes')]",
                         "aad_ExternalApiId": "[parameters('ExflowUri')]",
-                        "security_Admins": "[parameters('SecurityAdmins')]",
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('webSiteName'))).InstrumentationKey]"
+                        "security_Admins": "[parameters('SecurityAdmins')]"
                     }
                 },
                 {
