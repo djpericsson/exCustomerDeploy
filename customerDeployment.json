@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest42",
+            "defaultValue": "AddlevelTest43",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -377,16 +377,6 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
-                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
-                    "type": "siteextensions",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/config/appsettings')]"
-                    ],
-                    "properties": {}
-                },
-                {
-                    "apiVersion": "2018-02-01",
                     "name": "connectionstrings",
                     "type": "config",
                     "dependsOn": [
@@ -434,6 +424,15 @@
                     }
                 }
             ]
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "name": "[variables('webSiteName')]",
+            "type": "Microsoft.Web/sites/siteextensions",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+            ],
+            "properties": {}
         },
         {
             "type": "Microsoft.KeyVault/vaults",
