@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest14",
+            "defaultValue": "AddlevelTest15",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
