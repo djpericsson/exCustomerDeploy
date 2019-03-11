@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest37",
+            "defaultValue": "AddlevelTest38",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -348,9 +348,7 @@
                     "type": "extensions",
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2018-02-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
-                    ],
+                    "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"],
                     "properties": {
                         "packageUri": "[variables('PackageUri')]",
                         "dbType": "None",
@@ -583,10 +581,20 @@
                     "resources": [
                         {
                             "apiVersion": "2018-02-01",
-                            "name": "Microsoft.ApplicationInsights.AzureWebSites",
-                            "type": "siteextensions",
+                            "name": "[variables('webSiteName')]",
+                            "type": "Microsoft.Web/sites",
+                            "location": "[resourceGroup().location]",
                             "dependsOn": [],
-                            "properties": {}
+                            "properties": {},
+                            "resources": [
+                                {
+                                    "apiVersion": "2018-02-01",
+                                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
+                                    "type": "siteextensions",
+                                    "dependsOn": [],
+                                    "properties": {}
+                                }
+                            ]
                         }
                     ]
                 }
