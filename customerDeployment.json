@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest20",
+            "defaultValue": "AddlevelTest21",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -75,22 +75,6 @@
                 "description": "The Exflow URI to be used."
             }
         },
-        "webAppCertificateName": {
-            "type": "string",
-            "defaultValue": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4",
-            "minLength": 1,
-            "metadata": {
-                "description": "The Web Application Certificate Name to be used for SSL bindings."
-            }
-        },
-        "dnsDomainName": {
-            "type": "string",
-            "defaultValue": "addlevel.com",
-            "minLength": 1,
-            "metadata": {
-                "description": "The Web Application Custom Domain Name to be used for SSL bindings."
-            }
-        },
         "hybridConnection": {
             "type": "string",
             "allowedValues": ["True", "False"],
@@ -116,6 +100,8 @@
     },
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
+        "dnsDomainName": "addlevel.com",
+        "webAppCertificateName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4",
         "saasResourceGroupName": "SignUp-SAAS_Services",
         "certificateResourceGroupName": "ALIS",
         "certificateKeyVaultName": "ALIS-NorthEurope",
@@ -201,17 +187,17 @@
                     "resources": [
                         {
                             "type": "Microsoft.Network/dnszones",
-                            "name": "[parameters('dnsDomainName')]",
+                            "name": "[variables('dnsDomainName')]",
                             "apiVersion": "2016-04-01",
                             "location": "global",
                             "properties": {}
                         },
                         {
                             "type": "Microsoft.Network/dnsZones/CNAME",
-                            "name": "[concat(parameters('dnsDomainName'), '/', tolower(parameters('customerName')))]",
+                            "name": "[concat(variables('dnsDomainName'), '/', tolower(parameters('customerName')))]",
                             "apiVersion": "2016-04-01",
                             "location": "global",
-                            "dependsOn": ["[parameters('dnsDomainName')]"],
+                            "dependsOn": ["[variables('dnsDomainName')]"],
                             "properties": {
                                 "TTL": 3600,
                                 "CNAMERecord": {
@@ -409,7 +395,7 @@
                 },
                 {
                     "type": "hostnameBindings",
-                    "name": "[concat(tolower(parameters('customerName')), '.', parameters('dnsDomainName'))]",
+                    "name": "[concat(tolower(parameters('customerName')), '.', variables('dnsDomainName'))]",
                     "apiVersion": "2016-08-01",
                     "location": "[resourceGroup().location]",
                     "properties": {},
@@ -526,13 +512,13 @@
         },
         {
             "type": "Microsoft.Web/certificates",
-            "name": "[parameters('webAppCertificateName')]",
+            "name": "[variables('webAppCertificateName')]",
             "apiVersion": "2016-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
             "properties": {
                 "keyVaultId": "[variables('certificateKeyVaultId')]",
-                "keyVaultSecretName": "[parameters('webAppCertificateName')]",
+                "keyVaultSecretName": "[variables('webAppCertificateName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
             }
         },
@@ -544,7 +530,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
                 "[concat(variables('certificateResourceGroupName'),'-VaultPermissions')]",
-                "[parameters('webAppCertificateName')]"
+                "[variables('webAppCertificateName')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -564,9 +550,9 @@
                                 "name": "[variables('webSiteName')]",
                                 "hostNameSslStates": [
                                     {
-                                        "name": "[concat(tolower(parameters('customerName')), '.', parameters('dnsDomainName'))]",
+                                        "name": "[concat(tolower(parameters('customerName')), '.', variables('dnsDomainName'))]",
                                         "sslState": "SniEnabled",
-                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))).Thumbprint]",
+                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', variables('webAppCertificateName'))).Thumbprint]",
                                         "toUpdate": true
                                     }
                                 ]
