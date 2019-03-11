@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest24",
+            "defaultValue": "AddlevelTest25",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -347,10 +347,21 @@
             "identity": {
                 "type": "SystemAssigned"
             },
-            "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+                "[resourceId('microsoft.insights/components', variables('webSiteName'))]"
+            ],
             "properties": {
                 "name": "[variables('webSiteName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                      {
+                        "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('webSiteName')), '2015-05-01').InstrumentationKey]"
+                      }
+                    ]
+                }
             },
             "resources": [
                 {
@@ -383,8 +394,7 @@
                         "aad_TenantId": "[subscription().tenantId]",
                         "aad_PostLogoutRedirectUri": "[concat('https://', variables('webSiteName'), '.azurewebsites.net/close.aspx?signedout=yes')]",
                         "aad_ExternalApiId": "[parameters('ExflowUri')]",
-                        "security_Admins": "[parameters('SecurityAdmins')]",
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('webSiteName'))).InstrumentationKey]"
+                        "security_Admins": "[parameters('SecurityAdmins')]"
                     }
                 },
                 {
