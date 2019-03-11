@@ -510,10 +510,9 @@
                     "variables": {},
                     "resources": [
                         {
-                            "type": "Microsoft.KeyVault/vaults",
-                            "apiVersion": "2018-02-14",
-                            "name": "[variables('certificateKeyVaultName')]",
-                            "location": "[resourceGroup().location]",
+                            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+                            "name": "[concat(variables('certificateKeyVaultName'), '/add')]",
+                            "apiVersion": "2016-10-01",
                             "properties": {
                                 "accessPolicies": [
                                     {
@@ -522,7 +521,8 @@
                                         "permissions": {
                                             "keys": [],
                                             "secrets": ["get"],
-                                            "certificates": []
+                                            "certificates": [],
+                                            "storage": []
                                         }
                                     }
                                 ]
