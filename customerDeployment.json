@@ -338,7 +338,7 @@
             "properties": {
                 "applicationId": "[variables('webSiteName')]"
             }
-        }
+        },
         {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
@@ -391,11 +391,8 @@
                     "apiVersion": "2015-08-01",
                     "name": "Microsoft.ApplicationInsights.AzureWebSites",
                     "type": "siteextensions",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
-                    ],
-                    "properties": {
-                    }
+                    "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"],
+                    "properties": {}
                 },
                 {
                     "apiVersion": "2018-02-01",
