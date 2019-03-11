@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest26",
+            "defaultValue": "AddlevelTest27",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -371,9 +371,9 @@
                     }
                 },
                 {
-                    "apiVersion": "2015-08-01",
+                    "apiVersion": "2018-02-01",
                     "name": "Microsoft.ApplicationInsights.AzureWebSites",
-                    "type": "siteextensions",
+                    "type": "Microsoft.Web/sites/siteextensions",
                     "dependsOn": [
                       "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
                     ],
