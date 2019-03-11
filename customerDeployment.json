@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest35",
+            "defaultValue": "AddlevelTest36",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -313,7 +313,7 @@
             ]
         },
         {
-            "apiVersion": "2014-04-01",
+            "apiVersion": "2015-05-01",
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Insights/components",
             "location": "[resourceGroup().location]",
@@ -340,7 +340,7 @@
             "properties": {
                 "name": "[variables('webSiteName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
-                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('webSiteName')), '2015-05-01').InstrumentationKey]"
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('webSiteName'))).InstrumentationKey]"
             },
             "resources": [
                 {
