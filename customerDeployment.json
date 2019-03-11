@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest16",
+            "defaultValue": "AddlevelTest17",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -560,7 +560,7 @@
                             "name": "[variables('webSiteName')]",
                             "apiVersion": "2016-03-01",
                             "location": "[resourceGroup().location]",
-                            "dependsOn": [],
+                            "dependsOn": ["[parameters('webAppCertificateName')]"],
                             "properties": {
                                 "name": "[variables('webSiteName')]",
                                 "hostNameSslStates": [
