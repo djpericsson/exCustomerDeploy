@@ -338,13 +338,13 @@
         },
         {
             "type": "Microsoft.Web/certificates",
-            "name": "[variables('certificateName')]",
+            "name": "[parameters('webAppCertificateName')]",
             "apiVersion": "2016-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
             "properties": {
               "keyVaultId": "[variables('certificateKeyVaultId')]",
-              "keyVaultSecretName": "[variables('certificateName')]",
+              "keyVaultSecretName": "[parameters('webAppCertificateName')]",
               "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
             }
       },
@@ -571,7 +571,7 @@
                                     {
                                         "name": "'[concat(tolower(parameters('customerName')), ''.addlevel.com')]",
                                         "sslState": "SniEnabled",
-                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', variables('certificateName'))).Thumbprint]",
+                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('webAppCertificateName'))).Thumbprint]",
                                         "toUpdate": true
                                     }
                                 ]
