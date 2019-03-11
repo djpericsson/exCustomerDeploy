@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest29",
+            "defaultValue": "AddlevelTest30",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -395,7 +395,7 @@
                         "aad_PostLogoutRedirectUri": "[concat('https://', variables('webSiteName'), '.azurewebsites.net/close.aspx?signedout=yes')]",
                         "aad_ExternalApiId": "[parameters('ExflowUri')]",
                         "security_Admins": "[parameters('SecurityAdmins')]",
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('webSiteName')), '2015-05-01').InstrumentationKey]"
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('webSiteName'))).InstrumentationKey]"
                     }
                 },
                 {
