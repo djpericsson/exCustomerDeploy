@@ -109,8 +109,10 @@
     "variables": {
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "saasResourceGroupName": "SignUp-SAAS_Services",
+        "certificateName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4",
         "certificateResourceGroupName": "ALIS",
         "certificateKeyVaultName": "ALIS-NorthEurope",
+        "certificateKeyVaultId": "[resourceId(subscription().subscriptionId, variables('certificateResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('certificateKeyVaultName'))]",
         "templateBaseUri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master",
         "dnsDomainName": "addlevel.com",
         "wwwHostname": "[concat('www.', tolower(parameters('customerName')))]",
@@ -335,6 +337,18 @@
             ]
         },
         {
+            "type": "Microsoft.Web/certificates",
+            "name": "[variables('certificateName')]",
+            "apiVersion": "2016-03-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"],
+            "properties": {
+              "keyVaultId": "[variables('certificateKeyVaultId')]",
+              "keyVaultSecretName": "[variables('certificateName')]",
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+            }
+      },
+        {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Web/sites",
@@ -486,9 +500,7 @@
             "apiVersion": "2018-05-01",
             "name": "[concat(variables('certificateResourceGroupName'),'-VaultPermissions')]",
             "resourceGroup": "[variables('certificateResourceGroupName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
-            ],
+            "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"],
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -559,7 +571,7 @@
                                     {
                                         "name": "'[concat(tolower(parameters('customerName')), ''.addlevel.com')]",
                                         "sslState": "SniEnabled",
-                                        "thumbprint": "D7E53903A96DB6074E6EC35DFAADE9F568D307C9",
+                                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', variables('certificateName'))).Thumbprint]",
                                         "toUpdate": true
                                     }
                                 ]
