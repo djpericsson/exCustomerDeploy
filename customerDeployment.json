@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest21",
+            "defaultValue": "AddlevelTest22",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -327,6 +327,19 @@
             ]
         },
         {
+            "apiVersion": "2014-04-01",
+            "name": "[variables('webSiteName')]",
+            "type": "Microsoft.Insights/components",
+            "location": "East US",
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
+                "displayName": "AppInsightsComponent"
+            },
+            "properties": {
+                "applicationId": "[variables('webSiteName')]"
+            }
+        }
+        {
             "apiVersion": "2018-02-01",
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Web/sites",
@@ -361,15 +374,27 @@
                     "type": "config",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
+                        "[resourceId('microsoft.insights/components/', variables('webSiteName'))]"
                     ],
                     "properties": {
                         "aad_ClientId": "[reference(variables('identityResourceId'), '2015-08-31-PREVIEW').principalId]",
                         "aad_ClientSecret": "aad_ClientSecret",
                         "aad_TenantId": "[subscription().tenantId]",
-                        "aad_PostLogoutRedirectUri": "[concat('https://',variables('webSiteName'),'.azurewebsites.net/close.aspx?signedout=yes')]",
+                        "aad_PostLogoutRedirectUri": "[concat('https://', variables('webSiteName'), '.azurewebsites.net/close.aspx?signedout=yes')]",
                         "aad_ExternalApiId": "[parameters('ExflowUri')]",
-                        "security_Admins": "[parameters('SecurityAdmins')]"
+                        "security_Admins": "[parameters('SecurityAdmins')]",
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('webSiteName'))).InstrumentationKey]"
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
+                    "type": "siteextensions",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+                    ],
+                    "properties": {
                     }
                 },
                 {
