@@ -377,10 +377,13 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
-                    "name": "applicationInsights",
+                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
                     "type": "siteextensions",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+                        "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'appsettings')]",
+                        "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'connectionstrings')]",
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
                     ],
                     "properties": {}
                 },
