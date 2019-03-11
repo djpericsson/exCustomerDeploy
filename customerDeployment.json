@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest39",
+            "defaultValue": "AddlevelTest42",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -377,6 +377,16 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
+                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
+                    "type": "siteextensions",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/config/appsettings')]"
+                    ],
+                    "properties": {}
+                },
+                {
+                    "apiVersion": "2018-02-01",
                     "name": "connectionstrings",
                     "type": "config",
                     "dependsOn": [
@@ -568,9 +578,9 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
-            "name": "[concat(variables('webSiteName'),'-SiteExtensions')]",
+            "name": "[concat(variables('webSiteName'),'-DNS')]",
             "resourceGroup": "[resourcegroup().name]",
-            "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"],
+            "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -580,21 +590,24 @@
                     "variables": {},
                     "resources": [
                         {
-                            "apiVersion": "2018-02-01",
-                            "name": "[variables('webSiteName')]",
-                            "type": "Microsoft.Web/sites",
-                            "location": "[resourceGroup().location]",
-                            "dependsOn": [],
-                            "properties": {},
-                            "resources": [
-                                {
-                                    "apiVersion": "2018-02-01",
-                                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
-                                    "type": "siteextensions",
-                                    "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"],
-                                    "properties": {}
+                            "type": "Microsoft.Network/dnszones",
+                            "name": "[variables('dnsDomainName')]",
+                            "apiVersion": "2016-04-01",
+                            "location": "global",
+                            "properties": {}
+                        },
+                        {
+                            "type": "Microsoft.Network/dnsZones/CNAME",
+                            "name": "[concat(variables('dnsDomainName'), '/', tolower(parameters('customerName')))]",
+                            "apiVersion": "2016-04-01",
+                            "location": "global",
+                            "dependsOn": ["[variables('dnsDomainName')]"],
+                            "properties": {
+                                "TTL": 3600,
+                                "CNAMERecord": {
+                                    "cname": "[concat(variables('webSiteName'), '.azurewebsites.net')]"
                                 }
-                            ]
+                            }
                         }
                     ]
                 }
