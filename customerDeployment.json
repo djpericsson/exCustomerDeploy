@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest23",
+            "defaultValue": "AddlevelTest24",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -330,7 +330,7 @@
             "apiVersion": "2014-04-01",
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Insights/components",
-            "location": "East US",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
                 "displayName": "AppInsightsComponent"
@@ -391,7 +391,10 @@
                     "apiVersion": "2015-08-01",
                     "name": "Microsoft.ApplicationInsights.AzureWebSites",
                     "type": "siteextensions",
-                    "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"],
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+                        "[resourceId('microsoft.insights/components/', variables('webSiteName'))]"
+                    ],
                     "properties": {}
                 },
                 {
