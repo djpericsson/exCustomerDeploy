@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest86",
+            "defaultValue": "AddlevelTest87",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -454,7 +454,7 @@
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
-                        "[resourceId(resourcegroup().name, 'Microsoft.Relay/namespaces/authorizationRules', variables('namespaceName'), 'defaultSender')]"
+                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
                     ],
                     "properties": {
                         "serviceBusNamespace": "[variables('namespaceName')]",
@@ -462,8 +462,8 @@
                         "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                         "hostName": "[parameters('hybridConnectionHostName')]",
                         "port": "[parameters('hybridConnectionPort')]",
-                        "sendKeyName": "defaultSender",
-                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/defaultSender'), '2017-04-01').primaryKey]"
+                        "sendKeyName": "[variables('namespaceAuthRuleName')]",
+                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
                     }
                 }
             ]
