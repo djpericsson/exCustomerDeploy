@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest53",
+            "defaultValue": "AddlevelTest54",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -206,7 +206,7 @@
                         },
                         {
                             "type": "Microsoft.Network/dnsZones/CNAME",
-                            "name": "[concat(variables('dnsDomainName'), '/', tolower(trim(parameters('customerName'))))]",
+                            "name": "[concat(variables('dnsDomainName'), '/', tolower(replace(parameters('customerName'),' ', '')))]",
                             "apiVersion": "2016-04-01",
                             "location": "global",
                             "tags": "[variables('tags')]",
@@ -266,7 +266,7 @@
                 "cors": {
                     "corsRules": [
                         {
-                            "allowedOrigins": ["[concat(tolower(trim(parameters('customerName'))), '.', variables('dnsDomainName'))]"],
+                            "allowedOrigins": ["[concat(tolower(replace(parameters('customerName'),' ', '')), '.', variables('dnsDomainName'))]"],
                             "allowedMethods": ["GET"],
                             "maxAgeInSeconds": 200,
                             "exposedHeaders": ["x-ms-meta-*"],
@@ -438,7 +438,7 @@
                 },
                 {
                     "type": "hostnameBindings",
-                    "name": "[concat(tolower(trim(parameters('customerName'))), '.', variables('dnsDomainName'))]",
+                    "name": "[concat(tolower(replace(parameters('customerName'),' ', '')), '.', variables('dnsDomainName'))]",
                     "apiVersion": "2016-08-01",
                     "location": "[resourceGroup().location]",
                     "properties": {},
@@ -596,7 +596,7 @@
                                 "name": "[variables('webSiteName')]",
                                 "hostNameSslStates": [
                                     {
-                                        "name": "[concat(tolower(trim(parameters('customerName'))), '.', variables('dnsDomainName'))]",
+                                        "name": "[concat(tolower(replace(parameters('customerName'),' ', '')), '.', variables('dnsDomainName'))]",
                                         "sslState": "SniEnabled",
                                         "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', variables('webAppCertificateName'))).Thumbprint]",
                                         "toUpdate": true
