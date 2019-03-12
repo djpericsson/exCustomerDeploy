@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest59",
+            "defaultValue": "AddlevelTest60",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -128,7 +128,7 @@
         "namespaceName": "[variables('uniqueCustomerString')]",
         "namespaceAuthorizationRuleName": "defaultListener",
         "namespaceAuthRuleName": "defaultSender",
-        "userMetadata": "[concat('[{\"key\":\"endpoint\",\"value\":\"', parameters('hybridConnectionHostName'), ':', parameters('hybridConnectionPort'), '\"}]')]",
+        "userMetadata": "[if(empty(parameters('hybridConnectionHostName')), '', concat('[{\"key\":\"endpoint\",\"value\":\"', parameters('hybridConnectionHostName'), ':', parameters('hybridConnectionPort'), '\"}]'))]",
         "appServicePlanSKU": {
             "F1 Free": {
                 "name": "F1",
