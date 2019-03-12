@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest78",
+            "defaultValue": "AddlevelTest79",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -451,7 +451,7 @@
                     "location": "[resourceGroup().location]",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
                     "dependsOn": [
-                        "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
+                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
                     ],
                     "properties": {
