@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest56",
+            "defaultValue": "AddlevelTest57",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -81,7 +81,7 @@
         "hybridConnection": {
             "type": "string",
             "allowedValues": ["True", "False"],
-            "defaultValue": "True",
+            "defaultValue": "False",
             "metadata": {
                 "description": "Create a Hybrid Connection for the Web Application."
             },
@@ -89,14 +89,14 @@
         },
         "hybridConnectionHostName": {
             "type": "string",
-            "defaultValue": "MyHCServer",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Hybrid Connection Host Name."
             }
         },
         "hybridConnectionPort": {
             "type": "string",
-            "defaultValue": "443",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Hybrid Connection Port Number."
             }
