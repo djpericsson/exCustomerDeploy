@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest67",
+            "defaultValue": "AddlevelTest68",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -330,7 +330,7 @@
                             "name": "[variables('namespaceAuthRuleName')]",
                             "type": "authorizationRules",
                             "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": ["[variables('hybridConnectionName')]"],
+                            "dependsOn": ["[variables('namespaceAuthorizationRuleName')]"],
                             "properties": {
                                 "Rights": ["Send"]
                             }
