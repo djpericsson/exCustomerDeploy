@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest46",
+            "defaultValue": "AddlevelTest47",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -383,18 +383,6 @@
                         "InstrumentationEngine_EXTENSION_VERSION": "~1"
                     }
                 },
-                // {
-                //     "apiVersion": "2018-02-01",
-                //     "name": "Microsoft.ApplicationInsights.AzureWebSites",
-                //     "type": "siteextensions",
-                //     "dependsOn": [
-                //         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-                //         "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'appsettings')]",
-                //         "[resourceId('Microsoft.Web/Sites/config', variables('webSiteName'), 'connectionstrings')]",
-                //         "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
-                //     ],
-                //     "properties": {}
-                // },
                 {
                     "apiVersion": "2018-02-01",
                     "name": "connectionstrings",
@@ -589,7 +577,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "name": "[concat(variables('webSiteName'),'-DNS')]",
-            "resourceGroup": "[resourcegroup().name]",
+            "resourceGroup": "[variables('saasResourceGroupName')]",
             "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
