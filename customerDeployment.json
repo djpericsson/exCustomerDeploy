@@ -4,24 +4,27 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest50",
+            "defaultValue": "AddlevelTest52",
             "metadata": {
                 "description": "The name of the Customer to deploy."
-            }
+            },
+            "minLength": 1
         },
         "tenantName": {
             "type": "string",
             "defaultValue": "dev.addlevel.net",
             "metadata": {
                 "description": "The name of tenant to deploy to."
-            }
+            },
+            "minLength": 1
         },
         "partner": {
             "type": "string",
             "defaultValue": "Addlevel AB",
             "metadata": {
                 "description": "The name of the Partner for the Customer deployment."
-            }
+            },
+            "minLength": 1
         },
         "securityAdmins": {
             "type": "string",
@@ -56,7 +59,8 @@
             "defaultValue": "B1 Basic",
             "metadata": {
                 "description": "The App Service Plan SKU."
-            }
+            },
+            "minLength": 7
         },
         "applicationInsightsName": {
             "type": "string",
@@ -71,7 +75,8 @@
             "minLength": 1,
             "metadata": {
                 "description": "The Exflow URI to be used."
-            }
+            },
+            "minLength": 5
         },
         "hybridConnection": {
             "type": "string",
@@ -79,7 +84,8 @@
             "defaultValue": "True",
             "metadata": {
                 "description": "Create a Hybrid Connection for the Web Application."
-            }
+            },
+            "minLength": 4
         },
         "hybridConnectionHostName": {
             "type": "string",
@@ -313,6 +319,7 @@
                             "type": "authorizationRules",
                             "condition": "[equals(parameters('hybridConnection'), 'True')]",
                             "dependsOn": [
+                                "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
                             ],
                             "properties": {
@@ -325,6 +332,7 @@
                             "type": "authorizationRules",
                             "condition": "[equals(parameters('hybridConnection'), 'True')]",
                             "dependsOn": [
+                                "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
                             ],
                             "properties": {
