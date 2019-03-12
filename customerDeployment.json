@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest66",
+            "defaultValue": "AddlevelTest67",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -266,7 +266,9 @@
                 "cors": {
                     "corsRules": [
                         {
-                            "allowedOrigins": ["[concat(tolower(replace(parameters('customerName'),' ', '')), '.', variables('dnsDomainName'))]"],
+                            "allowedOrigins": [
+                                "[concat(tolower(replace(parameters('customerName'),' ', '')), '.', variables('dnsDomainName'))]"
+                            ],
                             "allowedMethods": ["GET"],
                             "maxAgeInSeconds": 200,
                             "exposedHeaders": ["x-ms-meta-*"],
@@ -318,9 +320,7 @@
                             "name": "[variables('namespaceAuthorizationRuleName')]",
                             "type": "authorizationRules",
                             "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
+                            "dependsOn": ["[variables('hybridConnectionName')]"],
                             "properties": {
                                 "Rights": ["Listen"]
                             }
@@ -330,9 +330,7 @@
                             "name": "[variables('namespaceAuthRuleName')]",
                             "type": "authorizationRules",
                             "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
+                            "dependsOn": ["[variables('hybridConnectionName')]"],
                             "properties": {
                                 "Rights": ["Send"]
                             }
