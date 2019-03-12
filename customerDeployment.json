@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest54",
+            "defaultValue": "AddlevelTest55",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -317,11 +317,7 @@
                             "apiVersion": "2017-04-01",
                             "name": "[variables('namespaceAuthorizationRuleName')]",
                             "type": "authorizationRules",
-                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
+                            "dependsOn": [],
                             "properties": {
                                 "Rights": ["Listen"]
                             }
@@ -330,11 +326,7 @@
                             "apiVersion": "2017-04-01",
                             "name": "[variables('namespaceAuthRuleName')]",
                             "type": "authorizationRules",
-                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
+                            "dependsOn": [],
                             "properties": {
                                 "Rights": ["Send"]
                             }
