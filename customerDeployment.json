@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest89",
+            "defaultValue": "AddlevelTest90",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -446,7 +446,7 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
-                    "name": "[variables('namespaceAuthRuleName')]",
+                    "name": "test1234",
                     "type": "hybridConnectionNamespaces/relays",
                     "location": "[resourceGroup().location]",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
