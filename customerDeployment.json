@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest48",
+            "defaultValue": "AddlevelTest49",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             }
@@ -86,13 +86,18 @@
         "uniqueCustomerString": "[concat('ex', uniqueString(subscription().subscriptionId, parameters('CustomerName')))]",
         "dnsDomainName": "addlevel.com",
         "webAppCertificateName": "addlevel-com7a8834e7-db14-4a74-ab70-3b8f1aa430b4",
-        "saasResourceGroupName": "SignUp-SAAS_Services",
+        "globalResourceGroupName": "SignUp-SAAS_Services",
         "packageUri": "https://github.com/djpericsson/AzureWebAppDeploy/raw/master/alis.zip",
         "storageSKU": "Standard_LRS",
         "certificateResourceGroupName": "ALIS",
         "certificateKeyVaultName": "ALIS-NorthEurope",
         "certificateKeyVaultId": "[resourceId(subscription().subscriptionId, variables('certificateResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('certificateKeyVaultName'))]",
         "appSettings": "[concat('{\"applicationInsightsInstrumentationKey\":\"AppInsightsKey\",\"APPINSIGHTS_INSTRUMENTATIONKEY\":\"AppInsightsKey\",\"APPINSIGHTS_PORTALINFO\":\"ASP.NET\",\"APPINSIGHTS_PROFILERFEATURE_VERSION\":\"1.0.0\",\"startup.DeploymentName\":\"', variables('uniqueCustomerString'),'\",\"Startup.HostRightPart\":\".', parameters('tenantName'),'\",\"Startup.AzureKeyVaultURL\":\"CustomerKeyVault\",\"offline_\":\"85.24.197.82\"}')]",
+        "tags": {
+            "Customer": "[parameters('CustomerName')]",
+            "Partner": "[parameters('partner')]",
+            "Solution": "[variables('uniqueCustomerString')]"
+        },
         "storageAccountName": "[variables('uniqueCustomerString')]",
         "containers": ["attachments", "documents", "exflowdiagnostics"],
         "webSiteName": "[variables('uniqueCustomerString')]",
@@ -160,8 +165,8 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
-            "name": "[concat(variables('saasResourceGroupName'),'-DNS')]",
-            "resourceGroup": "[variables('saasResourceGroupName')]",
+            "name": "[concat(variables('globalResourceGroupName'),'-DNS')]",
+            "resourceGroup": "[variables('globalResourceGroupName')]",
             "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
@@ -183,6 +188,7 @@
                             "name": "[concat(variables('dnsDomainName'), '/', tolower(parameters('customerName')))]",
                             "apiVersion": "2016-04-01",
                             "location": "global",
+                            "tags": "[variables('tags')]",
                             "dependsOn": ["[variables('dnsDomainName')]"],
                             "properties": {
                                 "TTL": 3600,
@@ -200,6 +206,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-02-01",
             "location": "[resourceGroup().location]",
+            "tags": "[variables('tags')]",
             "kind": "StorageV2",
             "sku": {
                 "name": "[variables('StorageSKU')]",
@@ -266,6 +273,7 @@
             "name": "[variables('namespaceName')]",
             "type": "Microsoft.Relay/Namespaces",
             "location": "[resourceGroup().location]",
+            "tags": "[variables('tags')]",
             "condition": "[equals(parameters('hybridConnection'), 'True')]",
             "kind": "Relay",
             "sku": {
@@ -330,6 +338,7 @@
             "name": "[variables('webSiteName')]",
             "type": "Microsoft.Web/sites",
             "location": "[resourceGroup().location]",
+            "tags": "[variables('tags')]",
             "identity": {
                 "type": "SystemAssigned"
             },
@@ -438,6 +447,7 @@
             "name": "[variables('keyVaultName')]",
             "apiVersion": "2018-02-14",
             "location": "[resourceGroup().location]",
+            "tags": "[variables('tags')]",
             "scale": null,
             "properties": {
                 "sku": {
@@ -466,6 +476,7 @@
             "name": "[guid(variables('webSiteName'))]",
             "apiVersion": "2017-09-01",
             "location": "[resourceGroup().location]",
+            "tags": "[variables('tags')]",
             "type": "Microsoft.Authorization/roleAssignments",
             "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"],
             "properties": {
@@ -556,6 +567,7 @@
                             "name": "[variables('webSiteName')]",
                             "apiVersion": "2016-03-01",
                             "location": "[resourceGroup().location]",
+                            "tags": "[variables('tags')]",
                             "dependsOn": [],
                             "properties": {
                                 "name": "[variables('webSiteName')]",
