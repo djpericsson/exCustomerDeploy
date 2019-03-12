@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest90",
+            "defaultValue": "AddlevelTest91",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -315,30 +315,30 @@
                         "userMetadata": "[variables('userMetadata')]"
                     },
                     "resources": [
-                        {
-                            "apiVersion": "2017-04-01",
-                            "name": "[variables('namespaceAuthorizationRuleName')]",
-                            "type": "authorizationRules",
-                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
-                            "properties": {
-                                "Rights": ["Listen"]
-                            }
-                        },
-                        {
-                            "apiVersion": "2017-04-01",
-                            "name": "[variables('namespaceAuthRuleName')]",
-                            "type": "authorizationRules",
-                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
-                            "properties": {
-                                "Rights": ["Send"]
-                            }
-                        }
+                        // {
+                        //     "apiVersion": "2017-04-01",
+                        //     "name": "[variables('namespaceAuthorizationRuleName')]",
+                        //     "type": "authorizationRules",
+                        //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                        //     "dependsOn": [
+                        //         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
+                        //     ],
+                        //     "properties": {
+                        //         "Rights": ["Listen"]
+                        //     }
+                        // },
+                        // {
+                        //     "apiVersion": "2017-04-01",
+                        //     "name": "[variables('namespaceAuthRuleName')]",
+                        //     "type": "authorizationRules",
+                        //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                        //     "dependsOn": [
+                        //         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
+                        //     ],
+                        //     "properties": {
+                        //         "Rights": ["Send"]
+                        //     }
+                        // }
                     ]
                 }
             ]
@@ -446,7 +446,7 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
-                    "name": "test1234",
+                    "name": "[variables('namespaceAuthRuleName')]",
                     "type": "hybridConnectionNamespaces/relays",
                     "location": "[resourceGroup().location]",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
