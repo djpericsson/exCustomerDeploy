@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest87",
+            "defaultValue": "AddlevelTest88",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -446,7 +446,7 @@
                 },
                 {
                     "apiVersion": "2018-02-01",
-                    "name": "[variables('hybridConnectionName')]",
+                    "name": "[concat(variables('webSiteName'), '/', variables('hybridConnectionName'), '/', variables('namespaceAuthRuleName'))]",
                     "type": "hybridConnectionNamespaces/relays",
                     "location": "[resourceGroup().location]",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
@@ -454,12 +454,12 @@
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
-                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
+                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
                     ],
                     "properties": {
                         "serviceBusNamespace": "[variables('namespaceName')]",
                         "relayName": "[variables('hybridConnectionName')]",
-                        "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
+                        "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
                         "hostName": "[parameters('hybridConnectionHostName')]",
                         "port": "[parameters('hybridConnectionPort')]",
                         "sendKeyName": "[variables('namespaceAuthRuleName')]",
