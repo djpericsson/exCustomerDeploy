@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest85",
+            "defaultValue": "AddlevelTest86",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -454,7 +454,7 @@
                         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
                         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
-                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/authorizationRules/', variables('namespaceName'), '/defaultSender')]"
+                        "[resourceId(resourcegroup().name, 'Microsoft.Relay/namespaces/authorizationRules', variables('namespaceName'), 'defaultSender')]"
                     ],
                     "properties": {
                         "serviceBusNamespace": "[variables('namespaceName')]",
