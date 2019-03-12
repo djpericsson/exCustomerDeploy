@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest76",
+            "defaultValue": "AddlevelTest77",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -304,43 +304,43 @@
             },
             "properties": {},
             "resources": [
-                {
-                    "apiVersion": "2017-04-01",
-                    "name": "[variables('hybridConnectionName')]",
-                    "type": "HybridConnections",
-                    "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                    "dependsOn": ["[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"],
-                    "properties": {
-                        "requiresClientAuthorization": "true",
-                        "userMetadata": "[variables('userMetadata')]"
-                    },
-                    "resources": [
-                        {
-                            "apiVersion": "2017-04-01",
-                            "name": "[variables('namespaceAuthorizationRuleName')]",
-                            "type": "authorizationRules",
-                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
-                            "properties": {
-                                "Rights": ["Listen"]
-                            }
-                        },
-                        {
-                            "apiVersion": "2017-04-01",
-                            "name": "[variables('namespaceAuthRuleName')]",
-                            "type": "authorizationRules",
-                            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                            "dependsOn": [
-                                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
-                            ],
-                            "properties": {
-                                "Rights": ["Send"]
-                            }
-                        }
-                    ]
-                }
+                // {
+                //     "apiVersion": "2017-04-01",
+                //     "name": "[variables('hybridConnectionName')]",
+                //     "type": "HybridConnections",
+                //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                //     "dependsOn": ["[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]"],
+                //     "properties": {
+                //         "requiresClientAuthorization": "true",
+                //         "userMetadata": "[variables('userMetadata')]"
+                //     },
+                //     "resources": [
+                //         {
+                //             "apiVersion": "2017-04-01",
+                //             "name": "[variables('namespaceAuthorizationRuleName')]",
+                //             "type": "authorizationRules",
+                //             "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                //             "dependsOn": [
+                //                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
+                //             ],
+                //             "properties": {
+                //                 "Rights": ["Listen"]
+                //             }
+                //         },
+                //         {
+                //             "apiVersion": "2017-04-01",
+                //             "name": "[variables('namespaceAuthRuleName')]",
+                //             "type": "authorizationRules",
+                //             "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                //             "dependsOn": [
+                //                 "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]"
+                //             ],
+                //             "properties": {
+                //                 "Rights": ["Send"]
+                //             }
+                //         }
+                //     ]
+                // }
             ]
         },
         {
@@ -443,27 +443,27 @@
                     "location": "[resourceGroup().location]",
                     "properties": {},
                     "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"]
-                },
-                {
-                    "apiVersion": "2018-02-01",
-                    "name": "[variables('hybridConnectionName')]",
-                    "type": "hybridConnectionNamespaces/relays",
-                    "location": "[resourceGroup().location]",
-                    "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                    "dependsOn": [
-                        "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
-                    ],
-                    "properties": {
-                        "serviceBusNamespace": "[variables('namespaceName')]",
-                        "relayName": "[variables('hybridConnectionName')]",
-                        "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                        "hostName": "[parameters('hybridConnectionHostName')]",
-                        "port": "[parameters('hybridConnectionPort')]",
-                        "sendKeyName": "defaultSender",
-                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/defaultSender'), '2017-04-01').primaryKey]"
-                    }
                 }
+                // {
+                //     "apiVersion": "2018-02-01",
+                //     "name": "[variables('hybridConnectionName')]",
+                //     "type": "hybridConnectionNamespaces/relays",
+                //     "location": "[resourceGroup().location]",
+                //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                //     "dependsOn": [
+                //         "[concat('Microsoft.Relay/namespaces/', variables('namespaceName'))]",
+                //         "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+                //     ],
+                //     "properties": {
+                //         "serviceBusNamespace": "[variables('namespaceName')]",
+                //         "relayName": "[variables('hybridConnectionName')]",
+                //         "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
+                //         "hostName": "[parameters('hybridConnectionHostName')]",
+                //         "port": "[parameters('hybridConnectionPort')]",
+                //         "sendKeyName": "defaultSender",
+                //         "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/defaultSender'), '2017-04-01').primaryKey]"
+                //     }
+                // }
             ]
         },
         {
