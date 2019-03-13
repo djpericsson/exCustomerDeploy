@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest110",
+            "defaultValue": "AddlevelTest111",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -444,28 +444,6 @@
                     "properties": {},
                     "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"]
                 }
-                // {
-                //     "apiVersion": "2018-02-01",
-                //     "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
-                //     "type": "hybridConnectionNamespaces/relays",
-                //     "location": "[resourceGroup().location]",
-                //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                //     "dependsOn": [
-                //         "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
-                //         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]",
-                //         "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
-                //         "[concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
-                //     ],
-                //     "properties": {
-                //         "serviceBusNamespace": "[variables('namespaceName')]",
-                //         "relayName": "[variables('hybridConnectionName')]",
-                //         "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                //         "hostName": "[parameters('hybridConnectionHostName')]",
-                //         "port": "[parameters('hybridConnectionPort')]",
-                //         "sendKeyName": "[variables('namespaceAuthRuleName')]",
-                //         "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
-                //     }
-                // }
             ]
         },
         {
