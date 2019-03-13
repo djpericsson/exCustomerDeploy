@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest101",
+            "defaultValue": "AddlevelTest102",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -445,8 +445,8 @@
                     "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"]
                 },
                 {
-                    "apiVersion": "2017-04-01",
-                    "name": "[variables('namespaceAuthRuleName')]",
+                    "apiVersion": "2018-02-01",
+                    "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
                     "type": "hybridConnectionNamespaces/relays",
                     "location": "[resourceGroup().location]",
                     "condition": "[equals(parameters('hybridConnection'), 'True')]",
@@ -464,7 +464,7 @@
                         "sendKeyName": "[variables('namespaceAuthRuleName')]",
                         "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
                     }
-                }
+}
             ]
         },
         {
