@@ -1,0 +1,49 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namespaceName": {
+            "type": "string"
+        },
+        "hybridConnectionName": {
+            "type": "string"
+        },
+        "hybridConnectionHostName": {
+            "type": "string"
+        },
+        "hybridConnectionPort": {
+            "type": "string"
+        },
+        "namespaceAuthRuleName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "The location in which the Azure Storage resources should be deployed."
+            }
+        }
+    },
+    "variables": {
+        "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', parameters('namespaceName'), parameters('hybridConnectionName'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-08-01",
+            "name": "[parameters('namespaceName')]",
+            "type": "Microsoft.Web/sites/hybridConnectionNamespaces/relays",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "properties": {
+                "serviceBusNamespace": "[parameters('namespaceName')]",
+                "relayName": "[parameters('hybridConnectionName')]",
+                "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', parameters('namespaceName'))]",
+                "hostName": "[parameters('hybridConnectionHostName')]",
+                "port": "[parameters('hybridConnectionPort')]",
+                "sendKeyName": "[parameters('namespaceAuthRuleName')]",
+                "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', parameters('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
+            }
+        }
+    ]
+}

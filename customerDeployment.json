@@ -443,30 +443,67 @@
                     "location": "[resourceGroup().location]",
                     "properties": {},
                     "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"]
+                }
+                // {
+                //     "apiVersion": "2018-02-01",
+                //     "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
+                //     "type": "hybridConnectionNamespaces/relays",
+                //     "location": "[resourceGroup().location]",
+                //     "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                //     "dependsOn": [
+                //         "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
+                //         "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]",
+                //         "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
+                //         "[concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
+                //     ],
+                //     "properties": {
+                //         "serviceBusNamespace": "[variables('namespaceName')]",
+                //         "relayName": "[variables('hybridConnectionName')]",
+                //         "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
+                //         "hostName": "[parameters('hybridConnectionHostName')]",
+                //         "port": "[parameters('hybridConnectionPort')]",
+                //         "sendKeyName": "[variables('namespaceAuthRuleName')]",
+                //         "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
+                //     }
+                // }
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "[concat(resourceGroup().name,'-Relay')]",
+            "resourceGroup": "[resourceGroup().name]",
+            "dependsOn": [
+                "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
+                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]",
+                "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
+                "[concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
+            ],
+            "condition": "[equals(parameters('hybridConnection'), 'True')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/djpericsson/exCustomerDeploy/master/relayDeployment.json",
+                    "contentVersion": "1.0.0.0"
                 },
-                {
-                    "apiVersion": "2018-02-01",
-                    "name": "[concat(variables('namespaceName'), '/', variables('hybridConnectionName'))]",
-                    "type": "hybridConnectionNamespaces/relays",
-                    "location": "[resourceGroup().location]",
-                    "condition": "[equals(parameters('hybridConnection'), 'True')]",
-                    "dependsOn": [
-                        "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
-                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]",
-                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]",
-                        "[concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName'))]"
-                    ],
-                    "properties": {
-                        "serviceBusNamespace": "[variables('namespaceName')]",
-                        "relayName": "[variables('hybridConnectionName')]",
-                        "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'))]",
-                        "hostName": "[parameters('hybridConnectionHostName')]",
-                        "port": "[parameters('hybridConnectionPort')]",
-                        "sendKeyName": "[variables('namespaceAuthRuleName')]",
-                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
+                "parameters": {
+                    "namespaceName": {
+                        "value": "[variables('namespaceName')]"
+                    },
+                    "hybridConnectionName": {
+                        "value": "[variables('hybridConnectionName')]"
+                    },
+                    "hybridConnectionHostName": {
+                        "value": "[parameters('hybridConnectionHostName')]"
+                    },
+                    "hybridConnectionPort": {
+                        "value": "[parameters('hybridConnectionPort')]"
+                    },
+                    "namespaceAuthRuleName": {
+                        "value": "[variables('namespaceAuthRuleName')]"
                     }
                 }
-            ]
+            }
         },
         {
             "type": "Microsoft.KeyVault/vaults",
