@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest107",
+            "defaultValue": "AddlevelTest108",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -470,7 +470,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2018-05-01",
             "name": "[concat(resourceGroup().name,'-Relay')]",
             "resourceGroup": "[resourceGroup().name]",
             "dependsOn": [
