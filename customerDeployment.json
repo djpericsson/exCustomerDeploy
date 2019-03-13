@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest97",
+            "defaultValue": "AddlevelTest98",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -443,28 +443,28 @@
                     "location": "[resourceGroup().location]",
                     "properties": {},
                     "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"]
+                },
+                {
+                    "apiVersion": "2017-04-01",
+                    "name": "[variables('namespaceAuthRuleName')]",
+                    "type": "hybridConnectionNamespaces/relays",
+                    "location": "[resourceGroup().location]",
+                    "condition": "[equals(parameters('hybridConnection'), 'True')]",
+                    "dependsOn": [
+                        "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
+                        "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
+                    ],
+                    "properties": {
+                        "serviceBusNamespace": "[variables('namespaceName')]",
+                        "relayName": "[variables('hybridConnectionName')]",
+                        "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
+                        "hostName": "[parameters('hybridConnectionHostName')]",
+                        "port": "[parameters('hybridConnectionPort')]",
+                        "sendKeyName": "[variables('namespaceAuthRuleName')]",
+                        "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
+                    }
                 }
             ]
-        },
-        {
-            "apiVersion": "2017-04-01",
-            "name": "[variables('namespaceAuthRuleName')]",
-            "type": "Microsoft.Web/sites/hybridConnectionNamespaces/relays",
-            "location": "[resourceGroup().location]",
-            "condition": "[equals(parameters('hybridConnection'), 'True')]",
-            "dependsOn": [
-                "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/Namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
-                "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
-            ],
-            "properties": {
-                "serviceBusNamespace": "[variables('namespaceName')]",
-                "relayName": "[variables('hybridConnectionName')]",
-                "relayArmUri": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourcegroup().name, '/providers/Microsoft.Relay/namespaces/', variables('namespaceName'), '/HybridConnections/', variables('hybridConnectionName'))]",
-                "hostName": "[parameters('hybridConnectionHostName')]",
-                "port": "[parameters('hybridConnectionPort')]",
-                "sendKeyName": "[variables('namespaceAuthRuleName')]",
-                "sendKeyValue": "[listkeys(concat(variables('hybridConnectionResourceId'), '/authorizationRules/', variables('namespaceAuthRuleName')), '2017-04-01').primaryKey]"
-            }
         },
         {
             "type": "Microsoft.KeyVault/vaults",
