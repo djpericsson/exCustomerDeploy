@@ -31,7 +31,7 @@
     "resources": [
         {
             "apiVersion": "2016-08-01",
-            "name": "[parameters('namespaceName')]",
+            "name": "[concat(parameters('namespaceName'), '/', parameters('hybridConnectionName'))]",
             "type": "Microsoft.Web/sites/hybridConnectionNamespaces/relays",
             "location": "[parameters('location')]",
             "dependsOn": [],
