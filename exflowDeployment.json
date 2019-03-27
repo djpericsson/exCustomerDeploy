@@ -4,7 +4,7 @@
     "parameters": {
         "customerName": {
             "type": "string",
-            "defaultValue": "AddlevelTest111",
+            "defaultValue": "",
             "metadata": {
                 "description": "The name of the Customer to deploy."
             },
@@ -12,7 +12,7 @@
         },
         "tenantName": {
             "type": "string",
-            "defaultValue": "dev.addlevel.net",
+            "defaultValue": "exflowdevcloud",
             "metadata": {
                 "description": "The name of tenant to deploy to."
             },
@@ -20,7 +20,7 @@
         },
         "partner": {
             "type": "string",
-            "defaultValue": "Addlevel AB",
+            "defaultValue": "",
             "metadata": {
                 "description": "The name of the Partner for the Customer deployment."
             },
@@ -28,7 +28,7 @@
         },
         "securityAdmins": {
             "type": "string",
-            "defaultValue": "ADMPEER",
+            "defaultValue": "",
             "metadata": {
                 "description": "Administrators of the Web Site, separated by ','."
             }
@@ -71,7 +71,7 @@
         },
         "exflowUri": {
             "type": "string",
-            "defaultValue": "https://axtestdynamics365aos-addlevel.cloudax.dynamics.com",
+            "defaultValue": "https://<CustomerUniqueURI>.cloudax.dynamics.com",
             "minLength": 1,
             "metadata": {
                 "description": "The Exflow URI to be used."
@@ -89,14 +89,14 @@
         },
         "hybridConnectionHostName": {
             "type": "string",
-            "defaultValue": "MyHCServer",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Hybrid Connection Host Name."
             }
         },
         "hybridConnectionPort": {
             "type": "string",
-            "defaultValue": "443",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Hybrid Connection Port Number."
             }
