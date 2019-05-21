@@ -181,7 +181,7 @@
         },
         "identityResourceId": "[concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default')]",
         "hybridConnectionResourceId": "[resourceId(resourcegroup().name, 'Microsoft.Relay/Namespaces/Hybridconnections', variables('namespaceName'), variables('hybridConnectionName'))]",
-        "workspaceName": "addlevel",
+        "workspaceName": "Addlevel-SignUp-Dev",
         "workSpaceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('globalResourceGroupName'), '/providers/Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]",
         "omsSolutions": {
 			"customSolution": {
